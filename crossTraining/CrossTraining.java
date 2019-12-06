@@ -17,6 +17,7 @@ public class CrossTraining {
 		for (int i : arr1) {
 			System.out.print(i + " ");
 		}
+		System.out.print(arr);
 	}
 
 	// Deep Copy Undirected Graph
