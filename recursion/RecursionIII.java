@@ -10,6 +10,34 @@ public class RecursionIII {
 
 	}
 
+	// From leaf to another leaf max sum
+	public int leafToLeafSum(TreeNode root) {
+	    int[] res = new int[] {Integer.MIN_VALUE};
+	    leafToLeaf(root, res);
+	    return res[0];
+	  }
+
+	  private int leafToLeaf(TreeNode root, int[] res) {
+	   if (root == null) {
+	     return 0;
+	   }
+	   int left = leafToLeaf(root.left, res);
+	   int right = leafToLeaf(root.right, res);
+
+	   int cur = left + right + root.value;
+	   
+	   if (res[0] < cur && (root.left != null && root.right != null)) {
+	     res[0] = cur;
+	   }
+
+	   if (root.left == null) {
+	     return root.value + right;
+	   } else if (root.right == null) {
+	     return root.value + left;
+	   }
+	   return Math.max(left, right) + root.value;
+	  }
+	
 	// Maximum Path Sum Binary Tree II (path from any node to any node)
 	// Given a binary tree in which each node contains an integer number. Find the
 	// maximum possible sum from any node to any node (the start node and the end
