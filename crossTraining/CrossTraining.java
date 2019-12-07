@@ -132,4 +132,26 @@ public class CrossTraining {
 			return e1.value < e2.value ? -1 : 1;
 		}
 	}
+	
+	// 12/05 汤sir讲座
+	// 国际象棋的马按照手机拨号键盘跳N步有多少种跳发
+	 public int knightDialer(int N) {
+		 int[] count = {0};
+		 int[][] neighbors = {};
+		 for (int pos = 0; pos < 10; pos++) {
+			 dfs(pos, N - 1, neighbors, count);
+		 }
+		 return count[0];
+	 }
+	 private void dfs(int pos, int hops, int[][] neighbors, int[] count) {
+		 // base case
+		 if (hops == 0) {
+			 count[0]++;
+			 return;
+		 }
+		 // recursive rule
+		 for (int nextPos : neighbors[pos]) {
+			 dfs(nextPos, hops - 1, neighbors, count);
+		 }
+	 }
 }
