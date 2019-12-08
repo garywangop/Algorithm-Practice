@@ -3,8 +3,10 @@ package recursion;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import solution.TreeNode;
@@ -273,6 +275,88 @@ public class RecursionIII {
 				node.right = stack.peekFirst();
 			}
 		}
+		return root;
+	}
+
+	// Reconstruct Binary Tree With Preorder And Inorder
+	public TreeNode reconstruct(int[] inOrder, int[] preOrder) {
+		Map<Integer, Integer> inIndex = indexMap(inOrder);
+		return helper213(preOrder, inIndex, 0, inOrder.length - 1, 0, preOrder.length - 1);
+	}
+
+	private Map<Integer, Integer> indexMap(int[] inOrder) {
+		Map<Integer, Integer> map = new HashMap<>();
+		for (int i = 0; i < inOrder.length; i++) {
+			map.put(inOrder[i], i);
+		}
+		return map;
+	}
+
+	private TreeNode helper213(int[] pre, Map<Integer, Integer> inIndex, int inLeft, int inRight, int preLeft,
+			int preRight) {
+		if (inLeft > inRight) {
+			return null;
+		}
+		TreeNode root = new TreeNode(pre[preLeft]);
+		// Get the position of the root in inOrder sequence, so that we will know the
+		// size of left/right subtrees.
+		int inMid = inIndex.get(root.value);
+		root.left = helper213(pre, inIndex, inLeft, inMid - 1, preLeft + 1, preLeft + inMid - inLeft);
+		root.right = helper213(pre, inIndex, inMid + 1, inRight, preRight + inMid - inRight + 1, preRight);
+		return root;
+	}
+
+	// Reconstruct Binary Search Tree With Postorder Traversal
+	public TreeNode reconstruct(int[] post) {
+		int[] index = new int[] { post.length - 1 };
+		return helper211(post, index, Integer.MIN_VALUE);
+	}
+
+	private TreeNode helper211(int[] postOrder, int[] index, int min) {
+		// Since it is a binary search tree,
+		// the "min" is actually the root,
+		// and we are using the root value to determine the boundary
+		// of left/right subtree.
+		if (index[0] < 0 || postOrder[index[0]] <= min) {
+			return null;
+		}
+		TreeNode root = new TreeNode(postOrder[index[0]--]);
+		root.right = helper211(postOrder, index, root.value);
+		root.left = helper211(postOrder, index, min);
+		return root;
+	}
+
+	// Reconstruct Binary Tree With Levelorder And Inorder
+	public TreeNode reconstruct2(int[] inOrder, int[] levelOrder) {
+		// Assumptions: level, in are not null,
+		// there is no duplicate in the binary tree.
+		Map<Integer, Integer> inMap = new HashMap<>();
+		for (int i = 0; i < inOrder.length; i++) {
+			inMap.put(inOrder[i], i);
+		}
+		List<Integer> lList = new ArrayList<>();
+		for (int num : levelOrder) {
+			lList.add(num);
+		}
+		return helper215(lList, inMap);
+	}
+
+	private TreeNode helper215(List<Integer> level, Map<Integer, Integer> inMap) {
+		if (level.isEmpty()) {
+			return null;
+		}
+		TreeNode root = new TreeNode(level.remove(0));
+		List<Integer> left = new ArrayList<>();
+		List<Integer> right = new ArrayList<>();
+		for (int num : level) {
+			if (inMap.get(num) < inMap.get(root.value)) {
+				left.add(num);
+			} else {
+				right.add(num);
+			}
+		}
+		root.left = helper215(left, inMap);
+		root.right = helper215(right, inMap);
 		return root;
 	}
 }
