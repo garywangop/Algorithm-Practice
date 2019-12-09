@@ -2,6 +2,7 @@ package crossTraining;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Queue;
 public class CrossTraining {
 	public static void main(String args[]) {
 		CrossTraining sol = new CrossTraining();
-		int[][] arr = {{3}, {1,2,3,4,5}};
+		int[][] arr = { { 3 }, { 1, 2, 3, 4, 5 } };
 		int[] arr1 = sol.merge(arr);
 		for (int i : arr1) {
 			System.out.print(i + " ");
@@ -89,40 +90,41 @@ public class CrossTraining {
 	// Merge K Sorted Array
 	public int[] merge(int[][] arrayOfArrays) {
 		PriorityQueue<Entry> minHeap = new PriorityQueue<>(new myComparator());
-	    int length = 0;
-	    for (int i = 0; i < arrayOfArrays.length; i++) {
-	      int[] array = arrayOfArrays[i];
-	      length += array.length;
-	      if (array.length != 0) {
-	        minHeap.offer(new Entry(i, 0, array[0]));
-	      }
-	    }
+		int length = 0;
+		for (int i = 0; i < arrayOfArrays.length; i++) {
+			int[] array = arrayOfArrays[i];
+			length += array.length;
+			if (array.length != 0) {
+				minHeap.offer(new Entry(i, 0, array[0]));
+			}
+		}
 
-	    int[] res = new int[length];
-	    int cur = 0;
-	    while (!minHeap.isEmpty()) {
-	      Entry temp = minHeap.poll();
-	      res[cur++] = temp.value;
-	      if (temp.col + 1 < arrayOfArrays[temp.row].length) {
-	        temp.col++;
-	        temp.value = arrayOfArrays[temp.row][temp.col];
-	        minHeap.offer(temp);
-	      }
-	    }
-	    return res;
+		int[] res = new int[length];
+		int cur = 0;
+		while (!minHeap.isEmpty()) {
+			Entry temp = minHeap.poll();
+			res[cur++] = temp.value;
+			if (temp.col + 1 < arrayOfArrays[temp.row].length) {
+				temp.col++;
+				temp.value = arrayOfArrays[temp.row][temp.col];
+				minHeap.offer(temp);
+			}
+		}
+		return res;
 	}
-	
+
 	static class Entry {
 		int row;
 		int col;
 		int value;
-		Entry (int row, int col, int value) {
+
+		Entry(int row, int col, int value) {
 			this.row = row;
 			this.col = col;
 			this.value = value;
 		}
 	}
-	
+
 	static class myComparator implements Comparator<Entry> {
 		@Override
 		public int compare(Entry e1, Entry e2) {
@@ -132,26 +134,62 @@ public class CrossTraining {
 			return e1.value < e2.value ? -1 : 1;
 		}
 	}
-	
+
 	// 12/05 汤sir讲座
 	// 国际象棋的马按照手机拨号键盘跳N步有多少种跳发
-	 public int knightDialer(int N) {
-		 int[] count = {0};
-		 int[][] neighbors = {};
-		 for (int pos = 0; pos < 10; pos++) {
-			 dfs(pos, N - 1, neighbors, count);
-		 }
-		 return count[0];
-	 }
-	 private void dfs(int pos, int hops, int[][] neighbors, int[] count) {
-		 // base case
-		 if (hops == 0) {
-			 count[0]++;
-			 return;
-		 }
-		 // recursive rule
-		 for (int nextPos : neighbors[pos]) {
-			 dfs(nextPos, hops - 1, neighbors, count);
-		 }
-	 }
+	public int knightDialer(int N) {
+		int[] count = { 0 };
+		int[][] neighbors = {};
+		for (int pos = 0; pos < 10; pos++) {
+			dfs(pos, N - 1, neighbors, count);
+		}
+		return count[0];
+	}
+
+	private void dfs(int pos, int hops, int[][] neighbors, int[] count) {
+		// base case
+		if (hops == 0) {
+			count[0]++;
+			return;
+		}
+		// recursive rule
+		for (int nextPos : neighbors[pos]) {
+			dfs(nextPos, hops - 1, neighbors, count);
+		}
+	}
+
+	// 3Sum
+	public List<List<Integer>> allTriples(int[] array, int target) {
+		// Assumptions: array is not null, array.length >= 3.
+		List<List<Integer>> res = new ArrayList<>();
+		Arrays.sort(array);
+		for (int i = 0; i < array.length - 2; i++) {
+			// Our goal is to find i < j < k, such that
+			// array[i] + array[j] + array[k] == target,
+			// To make sure there is no duplicate tuple,
+			// we ignore all the duplicate possible i.
+			// e.g, if we have 2, 2, 2, only the first 2 will be selected as i.
+			if (i > 0 && array[i] == array[i - 1]) {
+				continue;
+			}
+			int left = i + 1;
+			int right = array.length - 1;
+			while (left < right) {
+				int temp = array[left] + array[right];
+				if (temp + array[i] == target) {
+					res.add(Arrays.asList(array[i], array[left], array[right]));
+					left++;
+					// Ignore all possible duplicate j as well.
+					while (left < right && array[left] == array[left - 1]) {
+						left++;
+					}
+				} else if (temp + array[i] < target) {
+					left++;
+				} else {
+					right--;
+				}
+			}
+		}
+		return res;
+	}
 }
