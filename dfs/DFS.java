@@ -225,45 +225,128 @@ public class DFS {
 	 * l = 1, m = 1, n = 0, all the valid permutations are ["()<>", "(<>)", "<()>",
 	 * "<>()"]
 	 */
-	private static final char[] ps = new char[] {'(', ')', '<', '>', '{', '}'};
+	private static final char[] ps = new char[] { '(', ')', '<', '>', '{', '}' };
 
-	  public List<String> validParentheses(int l, int m, int n) {
-	    // Assumptions: l, m, n >= 0
-	    int[] remain = new int[] {l, l, m, m, n, n};
-	    int targetLen = 2 * l + 2 * m + 2 * n;
-	    StringBuilder cur = new StringBuilder();
-	    Deque<Character> stack = new ArrayDeque<>();
-	    List<String> res = new ArrayList<>();
-	    dfs179(cur, stack, remain, targetLen, res);
-	    return res;
-	  }
-	  private void dfs179(StringBuilder cur, Deque<Character> stack, int[] remain, int targetLen, List<String> res) {
-	    if (cur.length() == targetLen) {
-	      res.add(cur.toString());
-	      return;
-	    }
-	    for (int i = 0; i < remain.length; i++) {
-	      if (i % 2 == 0) {
-	        if (remain[i] > 0) {
-	          cur.append(ps[i]);
-	          stack.offerFirst(ps[i]);
-	          remain[i]--;
-	          dfs179(cur, stack, remain, targetLen, res);
-	          cur.deleteCharAt(cur.length() - 1);
-	          stack.pollFirst();
-	          remain[i]++;
-	        }
-	      } else {
-	        if (!stack.isEmpty() && stack.peekFirst() == ps[i - 1]) {
-	          cur.append(ps[i]);
-	          stack.pollFirst();
-	          remain[i]--;
-	          dfs179(cur, stack, remain, targetLen, res);
-	          cur.deleteCharAt(cur.length() - 1);
-	          stack.offerFirst(ps[i - 1]);
-	          remain[i]++;
-	        }
-	      }
-	    }
-	  }
+	public List<String> validParentheses(int l, int m, int n) {
+		// Assumptions: l, m, n >= 0
+		int[] remain = new int[] { l, l, m, m, n, n };
+		int targetLen = 2 * l + 2 * m + 2 * n;
+		StringBuilder cur = new StringBuilder();
+		Deque<Character> stack = new ArrayDeque<>();
+		List<String> res = new ArrayList<>();
+		dfs179(cur, stack, remain, targetLen, res);
+		return res;
+	}
+
+	private void dfs179(StringBuilder cur, Deque<Character> stack, int[] remain, int targetLen, List<String> res) {
+		if (cur.length() == targetLen) {
+			res.add(cur.toString());
+			return;
+		}
+		for (int i = 0; i < remain.length; i++) {
+			if (i % 2 == 0) {
+				if (remain[i] > 0) {
+					cur.append(ps[i]);
+					stack.offerFirst(ps[i]);
+					remain[i]--;
+					dfs179(cur, stack, remain, targetLen, res);
+					cur.deleteCharAt(cur.length() - 1);
+					stack.pollFirst();
+					remain[i]++;
+				}
+			} else {
+				if (!stack.isEmpty() && stack.peekFirst() == ps[i - 1]) {
+					cur.append(ps[i]);
+					stack.pollFirst();
+					remain[i]--;
+					dfs179(cur, stack, remain, targetLen, res);
+					cur.deleteCharAt(cur.length() - 1);
+					stack.offerFirst(ps[i - 1]);
+					remain[i]++;
+				}
+			}
+		}
+	}
+
+	/*
+	 * 642. All Valid Permutations Of Parentheses III Get all valid permutations of
+	 * l pairs of (), m pairs of <> and n pairs of {}, subject to the priority
+	 * restriction: {} higher than <> higher than ().
+	 * 
+	 * 
+	 * 
+	 * Assumptions
+	 * 
+	 * l, m, n >= 0
+	 * 
+	 * l + m + n > 0
+	 * 
+	 * 
+	 * 
+	 * Examples
+	 * 
+	 * l = 1, m = 1, n = 0, all the valid permutations are ["()<>", "<()>", "<>()"].
+	 * 
+	 * l = 2, m = 0, n = 1, all the valid permutations are [“()(){}”, “(){()}”,
+	 * “(){}()”, “{()()}”, “{()}()”, “{}()()”].
+	 */
+	
+
+	/*
+	 * 641. All Subsets II of Size K Given a set of characters represented by a
+	 * String, return a list containing all subsets of the characters whose size is
+	 * K. Notice that each subset returned will be sorted for deduplication.
+	 * 
+	 * 
+	 * 
+	 * Assumptions
+	 * 
+	 * There could be duplicate characters in the original set.
+	 * 
+	 * ​
+	 * 
+	 * Examples
+	 * 
+	 * Set = "abc", K = 2, all the subsets are [“ab”, “ac”, “bc”].
+	 * 
+	 * Set = "abb", K = 2, all the subsets are [“ab”, “bb”].
+	 * 
+	 * Set = "abab", K = 2, all the subsets are [“aa”, “ab”, “bb”].
+	 * 
+	 * Set = "", K = 0, all the subsets are [""].
+	 * 
+	 * Set = "", K = 1, all the subsets are [].
+	 * 
+	 * Set = null, K = 0, all the subsets are [].
+	 */
+	public List<String> subSetsIIOfSizeK(String set, int k) {
+		List<String> res = new ArrayList<>();
+		if (set == null) {
+			return res;
+		}
+		char[] arrSet = set.toCharArray();
+		Arrays.sort(arrSet);
+		StringBuilder sb = new StringBuilder();
+		dfs641(arrSet, k, sb, 0, res);
+		return res;
+	}
+
+	private void dfs641(char[] arrSet, int k, StringBuilder sb, int index, List<String> res) {
+		if (sb.length() == k) {
+			res.add(sb.toString());
+			return;
+		}
+		if (index == arrSet.length) {
+			return;
+		}
+		// Add arrSet[index] at this level
+		dfs641(arrSet, k, sb.append(arrSet[index]), index + 1, res);
+		sb.deleteCharAt(sb.length() - 1);
+		while (index < arrSet.length - 1 && arrSet[index] == arrSet[index + 1]) {
+			index++;
+		}
+		// Don't add arrSet[index] at this level
+		dfs641(arrSet, k, sb, index + 1, res);
+	}
+
 }
