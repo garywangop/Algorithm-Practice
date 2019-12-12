@@ -11,8 +11,10 @@ import java.util.Set;
 public class DFS {
 	public static void main(String args[]) {
 		DFS sol = new DFS();
-		char[] arr = { 'a', 'b', 'c' };
-		System.out.print(new String(arr, 0, 2));
+		String[] str = sol.combinations272(123);
+		for (String s : str) {
+			System.out.println(s);
+		}
 
 	}
 
@@ -290,7 +292,6 @@ public class DFS {
 	 * l = 2, m = 0, n = 1, all the valid permutations are [“()(){}”, “(){()}”,
 	 * “(){}()”, “{()()}”, “{()}()”, “{}()()”].
 	 */
-	
 
 	/*
 	 * 641. All Subsets II of Size K Given a set of characters represented by a
@@ -349,4 +350,144 @@ public class DFS {
 		dfs641(arrSet, k, sb, index + 1, res);
 	}
 
+	/*
+	 * 264. Keep Distance For Identical Elements Given an integer k, arrange the
+	 * sequence of integers [1, 1, 2, 2, 3, 3, ...., k - 1, k - 1, k, k], such that
+	 * the output integer array satisfy this condition:
+	 * 
+	 * Between each two i's, they are exactly i integers (for example: between the
+	 * two 1s, there is one number, between the two 2's there are two numbers).
+	 * 
+	 * If there does not exist such sequence, return null.
+	 * 
+	 * Assumptions:
+	 * 
+	 * k is guaranteed to be > 0 Examples:
+	 * 
+	 * k = 3, The output = { 2, 3, 1, 2, 1, 3 }.
+	 */
+	public int[] keepDistance(int k) {
+		// AssumptionS; k > 0
+		int[] arr = new int[2 * k];
+		for (int i = 0; i < k; i++) {
+			arr[i * 2] = i + 1;
+			arr[i * 2 + 1] = i + 1;
+		}
+		// used[i] == true if and only if i is used once
+		boolean[] used = new boolean[k + 1];
+		return helper264Method1(arr, 0, used) ? arr : null;
+	}
+
+	private boolean helper264Method1(int[] arr, int index, boolean[] used) {
+		if (index == arr.length) {
+			return true;
+		}
+		for (int i = index; i < arr.length; i++) {
+			int cur = arr[i];
+			if (!used[cur] || (index > cur && arr[index - cur - 1] == cur)) {
+				swap(arr, index, i);
+				used[cur] = !used[cur];
+				if (helper264Method1(arr, index + 1, used)) {
+					return true;
+				}
+				swap(arr, index, i);
+				used[cur] = !used[cur];
+			}
+		}
+		return false;
+	}
+
+	private void swap(int[] arr, int left, int right) {
+		int temp = arr[left];
+		arr[left] = arr[right];
+		arr[right] = temp;
+	}
+
+	/*
+	 * 272. Combinations For Telephone Pad I Given a telephone keypad, and an int
+	 * number, print all words which are possible by pressing these numbers, the
+	 * output strings should be sorted.
+	 * 
+	 * {0 : "", 1 : "", 2 : "abc", 3 : "def", 4 : "ghi", 5 : "jkl", 6 : "mno", 7 :
+	 * "pqrs", 8 : "tuv", 9 : "wxyz"}
+	 * 
+	 * Assumptions:
+	 * 
+	 * The given number >= 0 Examples:
+	 * 
+	 * if input number is 231, possible words which can be formed are:
+	 * 
+	 * [ad, ae, af, bd, be, bf, cd, ce, cf]
+	 */
+	public String[] combinations272(int number) {
+		List<String> res = new ArrayList<>();
+		String[] numToChar = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+		StringBuilder sb = new StringBuilder();
+		dfs272(Integer.toString(number).toCharArray(), numToChar, 0, sb, res);
+		return res.toArray(new String[0]);
+	}
+
+	private void dfs272(char[] number, String[] numToChar, int level, StringBuilder sb, List<String> res) {
+		if (level == number.length) {
+			res.add(sb.toString());
+			return;
+		}
+		char[] chars = numToChar[number[level] - '0'].toCharArray();
+		if (chars.length == 0) {
+			dfs272(number, numToChar, level + 1, sb, res);
+		} else {
+			for (int i = 0; i < chars.length; i++) {
+				dfs272(number, numToChar, level + 1, sb.append(chars[i]), res);
+				sb.deleteCharAt(sb.length() - 1);
+			}
+		}
+	}
+
+	/*
+	 * 147. Restore IP Addresses Given a string containing only digits, restore it
+	 * by retiring all possible valid IP address combinations.
+	 * 
+	 * Input: ”25525511135”
+	 * 
+	 * Output: [“255.255.11.135”, “255.255.111.35”]
+	 */
+	public List<String> Restore(String ip) {
+		List<String> res = new ArrayList<>();
+		if (ip == null || ip.length() == 0) {
+			return res;
+		}
+		StringBuilder sb = new StringBuilder();
+		dfs147(ip.toCharArray(), 0, 0, sb, res);
+		return res;
+	}
+
+	private void dfs147(char[] ip, int level, int offset, StringBuilder sb, List<String> res) {
+		if (level == 4) {
+			if (sb.length() == ip.length + 4) {
+				res.add(sb.substring(0, sb.length() - 1));
+			}
+			return;
+		}
+		if (offset < ip.length) {
+			dfs147(ip, level + 1, offset + 1, sb.append(ip[offset]).append('.'), res);
+			sb.delete(sb.length() - 2, sb.length());
+		}
+		if (offset + 1 < ip.length) {
+			char a = ip[offset];
+			char b = ip[offset + 1];
+			if (a != '0') {
+				dfs147(ip, level + 1, offset + 2, sb.append(a).append(b).append('.'), res);
+				sb.delete(sb.length() - 3, sb.length());
+			}
+		}
+		if (offset + 2 < ip.length) {
+			char a = ip[offset];
+			char b = ip[offset + 1];
+			char c = ip[offset + 2];
+			if (a == '1' || a == '2' && b >= '0' && b <= '4' || a == '2' && b == '5' && c >= '0' && c <= '5') {
+				dfs147(ip, level + 1, offset + 3, sb.append(a).append(b).append(c).append('.'), res);
+				sb.delete(sb.length() - 4, sb.length());
+			}
+		}
+	}
 }
