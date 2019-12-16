@@ -3,17 +3,24 @@ package dfs;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 public class DFS {
 	public static void main(String args[]) {
 		DFS sol = new DFS();
-		String str = "255255111255";
-		
-
+		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(3, Collections.reverseOrder());
+		maxHeap.offer(1);
+		maxHeap.offer(5);
+		maxHeap.offer(2);
+		maxHeap.offer(3);
+		maxHeap.offer(1);
+		maxHeap.offer(2);
+		System.out.println(maxHeap.size());
 	}
 
 	/*
