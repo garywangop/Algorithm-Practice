@@ -11,10 +11,8 @@ import java.util.Set;
 public class DFS {
 	public static void main(String args[]) {
 		DFS sol = new DFS();
-		String[] str = sol.combinations272(123);
-		for (String s : str) {
-			System.out.println(s);
-		}
+		String str = "255255111255";
+		
 
 	}
 

@@ -141,13 +141,22 @@ public class StringProblemsI {
 			return new String[0];
 		}
 		Map<String, Integer> freqMap = getFreq(combo);
-		PriorityQueue<Map.Entry<String, Integer>> maxHeap = 
+		PriorityQueue<Map.Entry<String, Integer>> minHeap = 
 				new PriorityQueue<>(k, new Comparator<Map.Entry<String, Integer>>() {
 			@Override
 			public int compare (Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
 				return e1.getValue().compareTo(e2.getValue());
 			}
 		});
+		for (Map.Entry<String, Integer> entry : freqMap.entrySet()) {
+			if (minHeap.size() < k) {
+				minHeap.offer(entry);
+			} else if (entry.getValue() > minHeap.peek().getValue()) {
+				minHeap.poll();
+				minHeap.offer(entry);
+			}
+		}
+		return freqArray(minHeap);
 	}
 	
 	private Map<String, Integer> getFreq(String[] combo) {
@@ -163,6 +172,13 @@ public class StringProblemsI {
 		return res;
 	}
 	
+	private String[] freqArray(PriorityQueue<Map.Entry<String, Integer>> minHeap) {
+		String[] res = new String[minHeap.size()];
+		for (int i = minHeap.size() - 1; i >= 0; i--) {
+			res[i] = minHeap.poll().getKey();
+		}
+		return res;
+	}
 	
 }
 
