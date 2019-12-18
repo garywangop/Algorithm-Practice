@@ -14,12 +14,9 @@ import java.util.Queue;
 public class CrossTraining {
 	public static void main(String args[]) {
 		CrossTraining sol = new CrossTraining();
-		int[][] arr = { { 3 }, { 1, 2, 3, 4, 5 } };
-		int[] arr1 = sol.merge(arr);
-		for (int i : arr1) {
-			System.out.print(i + " ");
-		}
-		System.out.print(arr);
+		int[] arr = { 5, 3, 2, 1, 4, 6 };
+		System.out.print(sol.maxTrapped2(arr));
+
 	}
 
 	// Deep Copy Undirected Graph
@@ -229,5 +226,68 @@ public class CrossTraining {
 			stack.offerFirst(i);
 		}
 		return res;
+	}
+
+	/*
+	 * 199. Max Water Trapped I Given a non-negative integer array representing the
+	 * heights of a list of adjacent bars. Suppose each bar has a width of 1. Find
+	 * the largest amount of water that can be trapped in the histogram.
+	 * 
+	 * Assumptions
+	 * 
+	 * The given array is not null Examples
+	 * 
+	 * { 2, 1, 3, 2, 4 }, the amount of water can be trapped is 1 + 1 = 2 (at index
+	 * 1, 1 unit of water can be trapped and index 3, 1 unit of water can be
+	 * trapped)
+	 */
+	public int maxTrapped1(int[] array) {
+		// Assumptions: array is not null.
+		if (array.length == 0) {
+			return 0;
+		}
+		int left = 0;
+		int right = array.length - 1;
+		int res = 0;
+		int lmax = array[left];
+		int rmax = array[right];
+		while (left < right) {
+			if (array[left] <= array[right]) {
+				res += Math.max(0, lmax - array[left]);
+				lmax = Math.max(lmax, array[left]);
+				left++;
+			} else {
+				res += Math.max(0, rmax - array[right]);
+				rmax = Math.max(rmax, array[right]);
+				right--;
+			}
+		}
+		return res;
+	}
+
+	public int maxTrapped2(int[] array) {
+		// Assumptions: array is not null.
+	    if (array.length == 0) {
+	      return 0;
+	    }
+	    int[] left = new int[array.length];
+	    left[0] = array[0];
+	    int[] right = new int[array.length];
+	    right[array.length - 1] = array[array.length - 1];
+	    for (int i = 1; i < array.length; i++) {
+	      left[i] = Math.max(left[i - 1], array[i]);
+	    }
+	    for (int i = array.length - 2; i >= 0; i--) {
+	      right[i] = Math.max(right[i + 1], array[i]);
+	    }
+	    int res = 0;
+	    for (int i = 1; i < array.length - 1; i++) {
+	      if (array[i] >= Math.min(left[i], right[i])) {
+	        continue;
+	      } else {
+	        res += Math.min(left[i], right[i]) - array[i];
+	      }
+	    }
+	    return res;
 	}
 }
