@@ -9,17 +9,7 @@ import java.util.Set;
 
 public class HashTable {
 	public static void main(String[] args) {
-		// Q1 test:
-		HashMap<Integer, Integer> Q1 = new HashMap<>();
-		Q1.put(1, 1);
-		Set<Map.Entry<Integer, Integer>> res1 = Q1.entrySet();
-		String[] Q1String = {"ad", "ad", "bc", "bc", "bc", "ca", "ca"};
-		String[] res = Q1.topKFrequent(Q1String, 2);
-		for (String i : res) {
-			System.out.println(i);
-		}
-		String s = "abc";
-		System.out.println(s.length());
+		
 		
 	}
 	public int miss (int[] arr) {
