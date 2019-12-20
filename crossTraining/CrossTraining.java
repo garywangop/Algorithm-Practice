@@ -14,9 +14,17 @@ import java.util.Queue;
 public class CrossTraining {
 	public static void main(String args[]) {
 		CrossTraining sol = new CrossTraining();
-		int[] arr = { 5, 3, 2, 1, 4, 6 };
-		System.out.print(sol.maxTrapped2(arr));
-
+		int[] arr = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 1 };
+		List<Integer> res = sol.maxWindows2(arr, 2);
+		System.out.println("Original: ");
+		System.out.println("1,2,3,4,5,6,7,8,9,1,1");
+		System.out.println("Actual: ");
+		for (int i : res) {
+			System.out.print(i + " ");
+		}
+		System.out.println();
+		System.out.println("Expected: ");
+		System.out.println("2,3,4,5,6,7,8,9,9,1");
 	}
 
 	// Deep Copy Undirected Graph
@@ -267,27 +275,111 @@ public class CrossTraining {
 
 	public int maxTrapped2(int[] array) {
 		// Assumptions: array is not null.
-	    if (array.length == 0) {
-	      return 0;
-	    }
-	    int[] left = new int[array.length];
-	    left[0] = array[0];
-	    int[] right = new int[array.length];
-	    right[array.length - 1] = array[array.length - 1];
-	    for (int i = 1; i < array.length; i++) {
-	      left[i] = Math.max(left[i - 1], array[i]);
-	    }
-	    for (int i = array.length - 2; i >= 0; i--) {
-	      right[i] = Math.max(right[i + 1], array[i]);
-	    }
-	    int res = 0;
-	    for (int i = 1; i < array.length - 1; i++) {
-	      if (array[i] >= Math.min(left[i], right[i])) {
-	        continue;
-	      } else {
-	        res += Math.min(left[i], right[i]) - array[i];
-	      }
-	    }
-	    return res;
+		if (array.length == 0) {
+			return 0;
+		}
+		int[] left = new int[array.length];
+		left[0] = array[0];
+		int[] right = new int[array.length];
+		right[array.length - 1] = array[array.length - 1];
+		for (int i = 1; i < array.length; i++) {
+			left[i] = Math.max(left[i - 1], array[i]);
+		}
+		for (int i = array.length - 2; i >= 0; i--) {
+			right[i] = Math.max(right[i + 1], array[i]);
+		}
+		int res = 0;
+		for (int i = 1; i < array.length - 1; i++) {
+			if (array[i] >= Math.min(left[i], right[i])) {
+				continue;
+			} else {
+				res += Math.min(left[i], right[i]) - array[i];
+			}
+		}
+		return res;
+	}
+
+	/*
+	 * 204. Maximum Values Of Size K Sliding Windows Given an integer array A and a
+	 * sliding window of size K, find the maximum value of each window as it slides
+	 * from left to right.
+	 * 
+	 * Assumptions
+	 * 
+	 * The given array is not null and is not empty
+	 * 
+	 * K >= 1, K <= A.length
+	 * 
+	 * Examples
+	 * 
+	 * A = {1, 2, 3, 2, 4, 2, 1}, K = 3, the windows are {{1,2,3}, {2,3,2}, {3,2,4},
+	 * {2,4,2}, {4,2,1}},
+	 * 
+	 * and the maximum values of each K-sized sliding window are [3, 3, 4, 4, 4]
+	 */
+	public List<Integer> maxWindows1(int[] array, int k) {
+		// Assumptions: array is not null or not empty,
+		// k >= 1 and k <= a.length
+		List<Integer> max = new ArrayList<Integer>();
+		// Use a descending deque to solve this problem,
+		// we store the index instead of the actual value in the deque,
+		// and we make sure:
+		// 1. the deque only contains index in the current sliding window.
+		// 2. for any index, the previous index with smaller value is
+		// discarded from the deque.
+		Deque<Integer> deque = new ArrayDeque<Integer>();
+		for (int i = 0; i < array.length; i++) {
+			// discard any index with smaller value than index i.
+			while (!deque.isEmpty() && array[deque.peekLast()] <= array[i]) {
+				deque.pollLast();
+			}
+			// It is possible the head element is out of the current
+			// sliding window so we might need to discard it as well.
+			if (!deque.isEmpty() && deque.peekFirst() <= i - k) {
+				deque.pollFirst();
+			}
+			deque.offerLast(i);
+			if (i >= k - 1) {
+				max.add(array[deque.peekFirst()]);
+			}
+		}
+		return max;
+	}
+
+	public List<Integer> maxWindows2(int[] array, int k) {
+		PriorityQueue<Pair> maxHeap = new PriorityQueue<>(k, new newComparator());
+		List<Integer> res = new ArrayList<>();
+		for (int i = 0; i < k; i++) {
+			maxHeap.offer(new Pair(i, array[i]));
+		}
+		res.add(maxHeap.peek().value);
+		for (int i = k; i < array.length; i++) {
+			maxHeap.offer(new Pair(i, array[i]));
+			while (maxHeap.peek().index < i - k + 1) {
+				maxHeap.poll();
+			}
+			res.add(maxHeap.peek().value);
+		}
+		return res;
+	}
+
+	static class Pair {
+		int index;
+		int value;
+
+		Pair(int index, int value) {
+			this.index = index;
+			this.value = value;
+		}
+	}
+
+	static class newComparator implements Comparator<Pair> {
+		@Override
+		public int compare(Pair p1, Pair p2) {
+			if (p1.value == p2.value) {
+				return 0;
+			}
+			return p1.value > p2.value ? -1 : 1;
+		}
 	}
 }

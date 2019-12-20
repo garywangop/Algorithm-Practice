@@ -12,7 +12,15 @@ import java.util.ArrayDeque;
 
 public class GraphSearch {
 	public static void main(String args[]) {
-
+		int[] a = {1, 2, 3};
+		int[] b = {4, 5, 6, 7};
+		int[][] res = new int[2][];
+		res[0] = Arrays.copyOf(a, a.length);
+		res[1] = Arrays.copyOf(b, b.length);
+		for (int i : res[1]) {
+			System.out.print(i + " ");
+		}
+		
 	}
 
 	/*
