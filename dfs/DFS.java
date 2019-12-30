@@ -13,14 +13,8 @@ import java.util.Set;
 public class DFS {
 	public static void main(String args[]) {
 		DFS sol = new DFS();
-		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(3, Collections.reverseOrder());
-		maxHeap.offer(1);
-		maxHeap.offer(5);
-		maxHeap.offer(2);
-		maxHeap.offer(3);
-		maxHeap.offer(1);
-		maxHeap.offer(2);
-		System.out.println(maxHeap.size());
+		char[] arr = new char[] { '1', 'b', 'd' };
+		System.out.println(new String(arr));
 	}
 
 	/*
@@ -494,5 +488,235 @@ public class DFS {
 				sb.delete(sb.length() - 4, sb.length());
 			}
 		}
+	}
+
+	/*
+	 * 155. Combinations Given two integers n and k, return all possible
+	 * combinations of k numbers out of 1 ... n.
+	 * 
+	 * E.g. Input: n = 4, k = 2
+	 * 
+	 * Output: [
+	 * 
+	 * [2,4],
+	 * 
+	 * [3,4],
+	 * 
+	 * [2,3],
+	 * 
+	 * [1,2],
+	 * 
+	 * [1,3],
+	 * 
+	 * [1,4]
+	 * 
+	 * ]
+	 */
+	public List<List<Integer>> combine(int n, int k) {
+		List<List<Integer>> res = new ArrayList<>();
+		List<Integer> cur = new ArrayList<>();
+		dfs155(1, n, k, cur, res);
+		return res;
+	}
+
+	private void dfs155(int start, int n, int k, List<Integer> cur, List<List<Integer>> res) {
+		if (k == 0) {
+			res.add(new ArrayList<>(cur));
+			return;
+		}
+		for (int i = start; i <= n; i++) {
+			cur.add(i);
+			dfs155(i + 1, n, k - 1, cur, res);
+			cur.remove(cur.size() - 1);
+		}
+	}
+
+	/*
+	 * 232. Combination Sum Given a collection of candidate numbers (C) and a target
+	 * number (T), find all unique combinations in C where the candidate numbers
+	 * sums toT. The same repeated number may be chosen from C unlimited number of
+	 * times.
+	 * 
+	 * All numbers (including target) will be positive integers.
+	 * 
+	 * Elements in a combination (a1, a2, … , ak) must be in non-descending order.
+	 * 
+	 * The solution set must not contain duplicate combinations.
+	 * 
+	 * Example
+	 * 
+	 * given candidate set 2,3,6,7 and target 7,
+	 * 
+	 * A solution set is:
+	 * 
+	 * [7]
+	 * 
+	 * [2, 2, 3]
+	 */
+
+	/*
+	 * Solution 1和solution 2的方法类似，只不过S1的方法走到index == candidates.length -
+	 * 1的那层就停了，但是S2走到了底 S1和99 cents的方法基本一致，但是该题如果还按99cents的方法就会显得特别冗余，还是S2的方法比较好
+	 */
+	// Solution 1:
+	public List<List<Integer>> combinationSum1(int[] candidates, int target) {
+		List<List<Integer>> res = new ArrayList<>();
+		List<Integer> cur = new ArrayList<>();
+		dfs232(candidates, target, 0, cur, res);
+		return res;
+	}
+
+	private void dfs232(int[] candidates, int target, int index, List<Integer> cur, List<List<Integer>> res) {
+		if (index == candidates.length - 1) {
+			if (target % candidates[candidates.length - 1] == 0) {
+				for (int i = 0; i < target / candidates[candidates.length - 1]; i++) {
+					cur.add(candidates[candidates.length - 1]);
+				}
+				res.add(new ArrayList<>(cur));
+				for (int i = 0; i < target / candidates[candidates.length - 1]; i++) {
+					cur.remove(cur.size() - 1);
+				}
+			}
+			return;
+		}
+		for (int i = 0; i <= target / candidates[index]; i++) {
+			for (int j = i; j > 0; j--) {
+				cur.add(candidates[index]);
+			}
+			dfs232(candidates, target - i * candidates[index], index + 1, cur, res);
+			for (int j = i; j > 0; j--) {
+				cur.remove(cur.size() - 1);
+			}
+		}
+	}
+
+	// Solution 2:
+	public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+		List<List<Integer>> res = new ArrayList<>();
+		List<Integer> cur = new ArrayList<>();
+		combinationSum2Helper(candidates, target, 0, cur, res);
+		return res;
+	}
+
+	private void combinationSum2Helper(int[] candidates, int target, int index, List<Integer> cur,
+			List<List<Integer>> res) {
+		if (index == candidates.length) {
+			if (target == 0) {
+				res.add(new ArrayList<>(cur));
+			}
+			return;
+		}
+		for (int i = 0; i <= target / candidates[index]; i++) {
+			for (int j = 0; j < i; j++) {
+				cur.add(candidates[index]);
+			}
+			combinationSum2Helper(candidates, target - i * candidates[index], index + 1, cur, res);
+			for (int j = 0; j < i; j++) {
+				cur.remove(cur.size() - 1);
+			}
+		}
+	}
+
+	/*
+	 * 231. Combination Sum II Given a collection of candidate numbers (C) and a
+	 * target number (T), find all unique combinations in C where the candidate
+	 * numbers sums toT. Each number in C may only be used once in the combination.
+	 * 
+	 * All numbers (including target) will be positive integers.
+	 * 
+	 * Elements in a combination (a1, a2, … , ak) must be in non-descending order.
+	 * 
+	 * The solution set must not contain duplicate combinations.
+	 * 
+	 * Example
+	 * 
+	 * given candidate set 10,1,2,7,6,1,5 and target 8,
+	 * 
+	 * A solution set is:
+	 * 
+	 * [1, 7]
+	 * 
+	 * [1, 2, 5]
+	 * 
+	 * [2, 6]
+	 * 
+	 * [1, 1, 6]
+	 */
+	public List<List<Integer>> combinationSumII(int[] num, int target) {
+		Arrays.sort(num);
+		List<List<Integer>> res = new ArrayList<>();
+		List<Integer> cur = new ArrayList<>();
+		dfs231(res, cur, num, 0, target);
+		return res;
+	}
+
+	private void dfs231(List<List<Integer>> res, List<Integer> list, int[] nums, int level, int rem) {
+
+		if (level == nums.length) {
+			if (rem == 0) {
+				res.add(new ArrayList<>(list));
+			}
+			return;
+		}
+		// think about we have a test case [1,2,3,4,5,6,...100] with target 10
+		if (rem < 0) {
+			return;
+		}
+		list.add(nums[level]);
+		dfs231(res, list, nums, level + 1, rem - nums[level]);
+		list.remove(list.size() - 1);
+		// if not pick, jump to the last same number
+		while (level + 1 < nums.length && nums[level] == nums[level + 1]) {
+			level++;
+		}
+		dfs231(res, list, nums, level + 1, rem);
+	}
+
+	/*
+	 * 500. Palindrome Permutation II Given a string s, return all the palindromic
+	 * permutations (without duplicates) of it. Return an empty list if no
+	 * palindromic permutation could be form.
+	 * 
+	 * For example:
+	 * 
+	 * Given s = "aabb", return ["abba", "baab"].
+	 * 
+	 * Given s = "abc", return [].
+	 */
+	public List<String> generatePalindromes(String input) {
+		List<String> res = new ArrayList<>();
+		char[] arr = input.toCharArray();
+		dfs500(arr, 0, res);
+		return res;
+	}
+
+	private void dfs500(char[] arr, int index, List<String> res) {
+		if (index == arr.length) {
+			if (checkPalindromes(arr)) {
+				res.add(new String(arr));
+			}
+			return;
+		}
+		Set<Character> set = new HashSet<>();
+		for (int i = index; i < arr.length; i++) {
+			if (set.add(arr[i])) {
+				swap(arr, i, index);
+				dfs500(arr, index + 1, res);
+				swap(arr, i, index);
+			}
+		}
+	}
+
+	private boolean checkPalindromes(char[] arr) {
+		int left = 0;
+		int right = arr.length - 1;
+		while (left < right) {
+			if (arr[left] != arr[right]) {
+				return false;
+			}
+			left++;
+			right--;
+		}
+		return true;
 	}
 }
