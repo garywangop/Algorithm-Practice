@@ -257,5 +257,87 @@ public class Solution {
 	 * 
 	 * The lowest common ancestor of 2 and 8 is null (8 is not in the tree)
 	 */
+	public TreeNode lowestCommonAncestorIII(TreeNode root, TreeNode one, TreeNode two) {
+		TreeNode node = lowestCommonAncestorI(root, one, two);
+		if (node == one) {
+			return find(one, two) ? one : null;
+		} else if (node == two) {
+			return find(two, one) ? two : null;
+		} else {
+			return node;
+		}
+	}
+
+	private boolean find(TreeNode root, TreeNode target) {
+		if (root == null) {
+			return false;
+		}
+		if (root == target) {
+			return true;
+		}
+		return find(root.left, target) || find(root.right, target);
+	}
+
+	/*
+	 * 299. Distance Of Two Nodes In Binary Tree
+	 * 
+	 * Find distance between two given keys of a Binary Tree, no parent pointers are
+	 * given. Distance between two nodes is the minimum number of edges to be
+	 * traversed to reach one node from other.
+	 * 
+	 * Assumptions:
+	 * 
+	 * There are no duplicate keys in the binary tree. The given two keys are
+	 * guaranteed to be in the binary tree. The given two keys are different.
+	 * Examples:
+	 * 
+	 * 1
+	 * 
+	 * / \
+	 * 
+	 * 2 3
+	 * 
+	 * / \ / \
+	 * 
+	 * 4 5 6 7
+	 * 
+	 * \
+	 * 
+	 * 8
+	 * 
+	 * distance(4, 5) = 2
+	 * 
+	 * distance(4, 6) = 4
+	 */
+	public int distance(TreeNode root, int k1, int k2) {
+		TreeNode node = lowestCommonAncestorI(root, k1, k2);
+		return dist(node, k1, 0) + dist(node, k2, 0);
+	}
+
+	private TreeNode lowestCommonAncestorI(TreeNode root, int a, int b) {
+		if (root == null || root.value == a || root.value == b) {
+			return root;
+		}
+		TreeNode left = lowestCommonAncestorI(root.left, a, b);
+		TreeNode right = lowestCommonAncestorI(root.right, a, b);
+		if (left != null && right != null) {
+			return root;
+		}
+		return left == null ? right : left;
+	}
+
+	private int dist(TreeNode root, int a, int level) {
+		if (root == null) {
+			return -1;
+		}
+		if (root.value == a) {
+			return level;
+		}
+		int left = dist(root.left, a, level + 1);
+		if (left == -1) {
+			return dist(root.right, a, level + 1);
+		}
+		return left;
+	}
 
 }
