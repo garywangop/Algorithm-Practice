@@ -5,17 +5,18 @@ import solution.TreeNode;
 public class Solution {
 
 	public static void main(String args[]) {
-		TreeNode t1 = new TreeNode(1);
-		TreeNode t2 = new TreeNode(1);
-		TreeNode t3 = new TreeNode(1);
-		TreeNode t4 = new TreeNode(1);
-		TreeNode t5 = new TreeNode(1);
-		TreeNode t6 = new TreeNode(1);
+		TreeNode t1 = new TreeNode(5);
+		TreeNode t2 = new TreeNode(9);
+		TreeNode t3 = new TreeNode(12);
+		TreeNode t4 = new TreeNode(2);
+		TreeNode t5 = new TreeNode(3);
+		TreeNode t6 = new TreeNode(14);
+		TreeNode t7 = new TreeNode(7);
 		t1.right = t3;
 		t1.left = t2;
 		t2.right = t5;
 		t2.left = t4;
-		t3.left = t6;
+		t3.right = t6;
 
 		TreeNode tt1 = new TreeNode(1);
 		TreeNode tt2 = new TreeNode(2);
@@ -24,13 +25,15 @@ public class Solution {
 		tt1.right = tt3;
 		Solution test = new Solution();
 
-		System.out.print(test.countUnivalSubtrees(t1));
+		System.out.print(test.lowestCommonAncestor(t1, t4, t3).value);
 	}
 
 	/*
-	 * 142. Binary Tree Diameter Given a binary tree in which each node contains an
-	 * integer number. The diameter is defined as the longest distance from one leaf
-	 * node to another leaf node. The distance is the number of nodes on the path.
+	 * 142. Binary Tree Diameter
+	 * 
+	 * Given a binary tree in which each node contains an integer number. The
+	 * diameter is defined as the longest distance from one leaf node to another
+	 * leaf node. The distance is the number of nodes on the path.
 	 * 
 	 * If there does not exist any such paths, return 0.
 	 */
@@ -85,8 +88,9 @@ public class Solution {
 	}
 
 	/*
-	 * 481. Count Univalue Subtrees Given a binary tree, count the number of
-	 * uni-value subtrees.
+	 * 481. Count Univalue Subtrees
+	 * 
+	 * Given a binary tree, count the number of uni-value subtrees.
 	 * 
 	 * A Uni-value subtree means all nodes of the subtree have the same value.
 	 * 
@@ -96,7 +100,7 @@ public class Solution {
 	 */
 
 	public int countUnivalSubtrees(TreeNode root) {
-		int[] count = new int[]{0};
+		int[] count = new int[] { 0 };
 		helper481(root, count);
 		return count[0];
 	}
@@ -119,4 +123,104 @@ public class Solution {
 		}
 		return false;
 	}
+
+	/*
+	 * 126. Lowest Common Ancestor I
+	 * 
+	 * Given two nodes in a binary tree, find their lowest common ancestor.
+	 * 
+	 * Assumptions
+	 * 
+	 * There is no parent pointer for the nodes in the binary tree
+	 * 
+	 * The given two nodes are guaranteed to be in the binary tree
+	 * 
+	 * Examples
+	 * 
+	 * 5
+	 * 
+	 * / \
+	 * 
+	 * 9 12
+	 * 
+	 * / \ \
+	 * 
+	 * 2 3 14
+	 * 
+	 * The lowest common ancestor of 2 and 14 is 5
+	 * 
+	 * The lowest common ancestor of 2 and 9 is 9
+	 */
+	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode a, TreeNode b) {
+		if (root == null || root == a || root == b) {
+			return root;
+		}
+		TreeNode left = lowestCommonAncestor(root.left, a, b);
+		TreeNode right = lowestCommonAncestor(root.right, a, b);
+		if (left != null && right != null) {
+			return root;
+		}
+		return left == null ? right : left;
+	}
+
+	/*
+	 * 127. Lowest Common Ancestor II
+	 * 
+	 * Given two nodes in a binary tree (with parent pointer available), find their
+	 * lowest common ancestor.
+	 * 
+	 * Assumptions
+	 * 
+	 * There is parent pointer for the nodes in the binary tree
+	 * 
+	 * The given two nodes are not guaranteed to be in the binary tree
+	 * 
+	 * Examples
+	 * 
+	 * 5
+	 * 
+	 * / \
+	 * 
+	 * 9 12
+	 * 
+	 * / \ \
+	 * 
+	 * 2 3 14
+	 * 
+	 * The lowest common ancestor of 2 and 14 is 5
+	 * 
+	 * The lowest common ancestor of 2 and 9 is 9
+	 * 
+	 * The lowest common ancestor of 2 and 8 is null (8 is not in the tree)
+	 */
+	/*
+	public TreeNodeP lowestCommonAncestor(TreeNodeP one, TreeNodeP two) {
+	    int l1 = height(one);
+	    int l2 = height(two);
+	    if (l1 <= l2) {
+	      return mergeNode(one, two, l2 - l1);
+	    } else {
+	      return mergeNode(two, one, l1 - l2);
+	    }
+	  }
+	  private TreeNodeP mergeNode(TreeNodeP one, TreeNodeP two, int diff) {
+	    while (diff > 0) {
+	      two = two.parent;
+	      diff--;
+	    }
+	    while (one != two) {
+	      one = one.parent;
+	      two = two.parent;
+	    }
+	    return one;
+	  }
+	  private int height(TreeNodeP node) {
+	    int height = 0;
+	    while (node != null) {
+	      height++;
+	      node = node.parent;
+	    }
+	    return height;
+	  }
+	  */
 }
