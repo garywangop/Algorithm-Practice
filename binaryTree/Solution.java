@@ -25,7 +25,7 @@ public class Solution {
 		tt1.right = tt3;
 		Solution test = new Solution();
 
-		System.out.print(test.lowestCommonAncestor(t1, t4, t3).value);
+		System.out.print(test.lowestCommonAncestorI(t1, t4, t7).value);
 	}
 
 	/*
@@ -151,12 +151,12 @@ public class Solution {
 	 * 
 	 * The lowest common ancestor of 2 and 9 is 9
 	 */
-	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode a, TreeNode b) {
+	public TreeNode lowestCommonAncestorI(TreeNode root, TreeNode a, TreeNode b) {
 		if (root == null || root == a || root == b) {
 			return root;
 		}
-		TreeNode left = lowestCommonAncestor(root.left, a, b);
-		TreeNode right = lowestCommonAncestor(root.right, a, b);
+		TreeNode left = lowestCommonAncestorI(root.left, a, b);
+		TreeNode right = lowestCommonAncestorI(root.right, a, b);
 		if (left != null && right != null) {
 			return root;
 		}
@@ -193,34 +193,69 @@ public class Solution {
 	 * 
 	 * The lowest common ancestor of 2 and 8 is null (8 is not in the tree)
 	 */
+
+	public TreeNodeP lowestCommonAncestorII(TreeNodeP one, TreeNodeP two) {
+		int l1 = height(one);
+		int l2 = height(two);
+		if (l1 <= l2) {
+			return mergeNode(one, two, l2 - l1);
+		} else {
+			return mergeNode(two, one, l1 - l2);
+		}
+	}
+
+	private TreeNodeP mergeNode(TreeNodeP one, TreeNodeP two, int diff) {
+		while (diff > 0) {
+			two = two.parent;
+			diff--;
+		}
+		while (one != two) {
+			one = one.parent;
+			two = two.parent;
+		}
+		return one;
+	}
+
+	private int height(TreeNodeP node) {
+		int height = 0;
+		while (node != null) {
+			height++;
+			node = node.parent;
+		}
+		return height;
+	}
+
 	/*
-	public TreeNodeP lowestCommonAncestor(TreeNodeP one, TreeNodeP two) {
-	    int l1 = height(one);
-	    int l2 = height(two);
-	    if (l1 <= l2) {
-	      return mergeNode(one, two, l2 - l1);
-	    } else {
-	      return mergeNode(two, one, l1 - l2);
-	    }
-	  }
-	  private TreeNodeP mergeNode(TreeNodeP one, TreeNodeP two, int diff) {
-	    while (diff > 0) {
-	      two = two.parent;
-	      diff--;
-	    }
-	    while (one != two) {
-	      one = one.parent;
-	      two = two.parent;
-	    }
-	    return one;
-	  }
-	  private int height(TreeNodeP node) {
-	    int height = 0;
-	    while (node != null) {
-	      height++;
-	      node = node.parent;
-	    }
-	    return height;
-	  }
-	  */
+	 * 128. Lowest Common Ancestor III
+	 * 
+	 * Given two nodes in a binary tree, find their lowest common ancestor (the
+	 * given two nodes are not guaranteed to be in the binary tree).
+	 * 
+	 * Return null If any of the nodes is not in the tree.
+	 * 
+	 * Assumptions
+	 * 
+	 * There is no parent pointer for the nodes in the binary tree
+	 * 
+	 * The given two nodes are not guaranteed to be in the binary tree
+	 * 
+	 * Examples
+	 * 
+	 * 5
+	 * 
+	 * / \
+	 * 
+	 * 9 12
+	 * 
+	 * / \ \
+	 * 
+	 * 2 3 14
+	 * 
+	 * The lowest common ancestor of 2 and 14 is 5
+	 * 
+	 * The lowest common ancestor of 2 and 9 is 9
+	 * 
+	 * The lowest common ancestor of 2 and 8 is null (8 is not in the tree)
+	 */
+
 }
