@@ -1,5 +1,8 @@
 package binaryTree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import solution.TreeNode;
 
 public class Solution {
@@ -16,7 +19,7 @@ public class Solution {
 		t1.left = t2;
 		t2.right = t5;
 		t2.left = t4;
-		t3.right = t6;
+		// t3.right = t6;
 
 		TreeNode tt1 = new TreeNode(1);
 		TreeNode tt2 = new TreeNode(2);
@@ -25,7 +28,7 @@ public class Solution {
 		tt1.right = tt3;
 		Solution test = new Solution();
 
-		System.out.print(test.lowestCommonAncestorI(t1, t4, t7).value);
+		System.out.print(test.diameter(t1));
 	}
 
 	/*
@@ -48,8 +51,11 @@ public class Solution {
 	}
 
 	public int helper(TreeNode root) {
-		if (root.left == null && root.right == null) {
-			return 1;
+//		if (root.left == null && root.right == null) {
+//			return 1;
+//		}
+		if (root == null) {
+			return 0;
 		}
 		if (root.left == null) {
 			return helper(root.right) + 1;
@@ -281,14 +287,14 @@ public class Solution {
 	/*
 	 * 299. Distance Of Two Nodes In Binary Tree
 	 * 
-	 * Find distance between two given keys of a Binary Tree, no parent pointers are
-	 * given. Distance between two nodes is the minimum number of edges to be
+	 * Find distance between two given values of a Binary Tree, no parent pointers
+	 * are given. Distance between two nodes is the minimum number of edges to be
 	 * traversed to reach one node from other.
 	 * 
 	 * Assumptions:
 	 * 
-	 * There are no duplicate keys in the binary tree. The given two keys are
-	 * guaranteed to be in the binary tree. The given two keys are different.
+	 * There are no duplicate values in the binary tree. The given two values are
+	 * guaranteed to be in the binary tree. The given two values are different.
 	 * Examples:
 	 * 
 	 * 1
@@ -338,6 +344,56 @@ public class Solution {
 			return dist(root.right, a, level + 1);
 		}
 		return left;
+	}
+
+	/*
+	 * 524. Binary Tree Paths
+	 * 
+	 * Given a binary tree, return all root-to-leaf paths from left to right.
+	 * 
+	 * For example, given the following binary tree:
+	 * 
+	 * 1 / \ 2 3 \ 5 All root-to-leaf paths are:
+	 * 
+	 * ["1->2->5", "1->3"]
+	 */
+
+	public String[] binaryTreePaths(TreeNode root) {
+		List<String> res = new ArrayList<>();
+		if (root == null) {
+			return new String[0];
+		}
+		StringBuilder sb = new StringBuilder();
+		helper(root, sb, res);
+		String[] str = new String[res.size()];
+		for (int i = 0; i < res.size(); i++) {
+			str[i] = res.get(i);
+		}
+		return str;
+	}
+
+	private void helper(TreeNode root, StringBuilder sb, List<String> result) {
+
+		if (root.left == null && root.right == null) {
+			sb.append(root.value);
+			result.add(sb.toString());
+			sb.deleteCharAt(sb.length() - 1);
+			return;
+		}
+		int len = sb.length();
+		if (root.left != null) {
+			sb.append(root.value).append("->");
+			helper(root.left, sb, result);
+
+			sb.setLength(len);
+		}
+
+		if (root.right != null) {
+			sb.append(root.value).append("->");
+			helper(root.right, sb, result);
+
+			sb.setLength(len);
+		}
 	}
 
 }
