@@ -17,8 +17,8 @@ public class Solution {
 		TreeNode t7 = new TreeNode(7);
 		t1.right = t3;
 		t1.left = t2;
-		t2.right = t5;
-		t2.left = t4;
+		t3.right = t5;
+		t3.left = t4;
 		// t3.right = t6;
 
 		TreeNode tt1 = new TreeNode(1);
@@ -27,8 +27,11 @@ public class Solution {
 		tt1.left = tt2;
 		tt1.right = tt3;
 		Solution test = new Solution();
+		String[] res = test.binaryTreePaths(t1);
+		for (String i : res) {
+			System.out.println(i);
+		}
 
-		System.out.print(test.diameter(t1));
 	}
 
 	/*
@@ -359,12 +362,12 @@ public class Solution {
 	 */
 
 	public String[] binaryTreePaths(TreeNode root) {
-		List<String> res = new ArrayList<>();
 		if (root == null) {
 			return new String[0];
 		}
+		List<String> res = new ArrayList<>();
 		StringBuilder sb = new StringBuilder();
-		helper(root, sb, res);
+		helper524(root, sb, res);
 		String[] str = new String[res.size()];
 		for (int i = 0; i < res.size(); i++) {
 			str[i] = res.get(i);
@@ -372,28 +375,97 @@ public class Solution {
 		return str;
 	}
 
-	private void helper(TreeNode root, StringBuilder sb, List<String> result) {
-
+	private void helper524(TreeNode root, StringBuilder sb, List<String> res) {
 		if (root.left == null && root.right == null) {
 			sb.append(root.value);
-			result.add(sb.toString());
+			res.add(sb.toString());
 			sb.deleteCharAt(sb.length() - 1);
 			return;
 		}
-		int len = sb.length();
+		int length = sb.length();
 		if (root.left != null) {
+			// int length = sb.length();
 			sb.append(root.value).append("->");
-			helper(root.left, sb, result);
-
-			sb.setLength(len);
+			helper524(root.left, sb, res);
+			/*
+			 * sb.setLength(sb.length() - 3); 这样写不行，因为如果传进来的root.value是两位数，那就要-4，是3位数就要-5
+			 * 所以最好的方法是在append sb之前，把原本sb的length记录下来，
+			 * 然后做完DFS之后再把新加上去的东西用sb.setLength()的方法给删掉
+			 * 
+			 * 可以把length记录在sb.append(root.value).append("->")上面一句，
+			 * 但是这样写的话，root.left和root.right的DFS都要写，很不专业，所以最好还是写在外面
+			 */
+			sb.setLength(length);
 		}
-
 		if (root.right != null) {
 			sb.append(root.value).append("->");
-			helper(root.right, sb, result);
-
-			sb.setLength(len);
+			helper524(root.right, sb, res);
+			// sb.setLength(sb.length() - 3);
+			sb.setLength(length);
 		}
 	}
 
+	/*
+	 * 138. Maximum Path Sum Binary Tree I
+	 * 
+	 * Given a binary tree in which each node contains an integer number. Find the
+	 * maximum possible sum from one leaf node to another leaf node. If there is no
+	 * such path available, return Integer.MIN_VALUE(Java)/INT_MIN (C++).
+	 * 
+	 * Examples
+	 * 
+	 * -15
+	 * 
+	 * / \
+	 * 
+	 * 2 11
+	 * 
+	 * / \
+	 * 
+	 * 6 14
+	 * 
+	 * The maximum path sum is 6 + 11 + 14 = 31.
+	 * 
+	 * How is the binary tree represented?
+	 * 
+	 * We use the level order traversal sequence with a special symbol "#" denoting
+	 * the null node.
+	 * 
+	 * For Example:
+	 * 
+	 * The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
+	 * 
+	 * 1
+	 * 
+	 * / \
+	 * 
+	 * 2 3
+	 * 
+	 * /
+	 * 
+	 * 4
+	 */
+	public int maxPathSumI(TreeNode root) {
+		int[] max = new int[] { Integer.MIN_VALUE };
+		helper138(root, max);
+		return max[0];
+	}
+
+	private int helper138(TreeNode root, int[] max) {
+		if (root == null) {
+			return 0;
+		}
+		if (root.left == null) {
+			return helper138(root.right, max) + root.value;
+		}
+		if (root.right == null) {
+			return helper138(root.left, max) + root.value;
+		}
+		int left = helper138(root.left, max);
+		int right = helper138(root.right, max);
+		if (root.left != null && root.right != null) {
+			max[0] = Math.max(max[0], left + right + root.value);
+		}
+		return Math.max(left, right) + root.value;
+	}
 }
