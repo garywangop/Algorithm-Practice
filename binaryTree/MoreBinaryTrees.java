@@ -2,6 +2,8 @@ package binaryTree;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Queue;
+import java.util.ArrayDeque;
 
 import solution.TreeNode;
 
@@ -304,5 +306,63 @@ public class MoreBinaryTrees {
 		max[0] = Math.max(max[0], curLen);
 		maxPath(root.left, root.value, curLen, max);
 		maxPath(root.right, root.value, curLen, max);
+	}
+
+	/*
+	 * 295. Cousins In Binary Tree
+	 * 
+	 * Given a binary Tree and the two values, determine whether the two nodes are
+	 * cousins of each other or not. Two nodes are cousins of each other if they are
+	 * at the same level and have different parents.
+	 * 
+	 * Assumptions:
+	 * 
+	 * It is not guranteed the two values are all in the binary tree. There are no
+	 * duplicate values in the binary tree. Examples:
+	 * 
+	 * 6 / \ 3 5 / \ / \
+	 * 
+	 * 7 8 1 13 7 and 1, result is true. 3 and 5, result is false. 7 and 5, result
+	 * is false.
+	 */
+
+	public boolean isCousin(TreeNode root, int a, int b) {
+		if (root == null) {
+			return false;
+		}
+		Queue<TreeNode> queue = new ArrayDeque<>();
+		boolean finda = false;
+		boolean findb = false;
+		queue.offer(root);
+		while (!queue.isEmpty()) {
+			int size = queue.size();
+			for (int i = 0; i < size; i++) {
+				TreeNode cur = queue.poll();
+				if (cur.left != null && cur.right != null && (cur.left.value == a && cur.right.value == b
+						|| cur.left.value == b && cur.right.value == a)) {
+					return false;
+				}
+				if (cur.left != null && cur.left.value == a || cur.right != null && cur.right.value == a) {
+					finda = true;
+				}
+				if (cur.left != null && cur.left.value == b || cur.right != null && cur.right.value == b) {
+					findb = true;
+				}
+				if (finda && findb) {
+					return true;
+				}
+				if (cur.left != null) {
+					queue.offer(cur.left);
+				}
+				if (cur.right != null) {
+					queue.offer(cur.right);
+				}
+
+			}
+			if (finda || findb) {
+				return false;
+			}
+		}
+		return false;
 	}
 }
