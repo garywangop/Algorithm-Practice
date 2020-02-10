@@ -1,5 +1,8 @@
 package binaryTree;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import solution.TreeNode;
 
 public class MoreBinaryTrees {
@@ -151,14 +154,155 @@ public class MoreBinaryTrees {
 	 * path 5-8-3 which sum is 16.
 	 */
 
-	public boolean exist(TreeNode root, int target) {
+	public boolean exist1(TreeNode root, int target) {
 		if (root == null) {
 			return false;
 		}
 		if (root.left == null && root.right == null) {
 			return root.value == target;
 		}
-		return exist(root.left, target - root.value) || exist(root.right, target - root.value);
+		return exist1(root.left, target - root.value) || exist1(root.right, target - root.value);
 	}
 
+	/*
+	 * 141. Binary Tree Path Sum To Target III
+	 * 
+	 * Given a binary tree in which each node contains an integer number. Determine
+	 * if there exists a path (the path can only be from one node to itself or to
+	 * any of its descendants), the sum of the numbers on the path is the given
+	 * target number.
+	 * 
+	 * Examples
+	 * 
+	 * 5
+	 * 
+	 * / \
+	 * 
+	 * 2 11
+	 * 
+	 * / \
+	 * 
+	 * 6 14
+	 * 
+	 * /
+	 * 
+	 * 3
+	 * 
+	 * If target = 17, There exists a path 11 + 6, the sum of the path is target.
+	 * 
+	 * If target = 20, There exists a path 11 + 6 + 3, the sum of the path is
+	 * target.
+	 * 
+	 * If target = 10, There does not exist any paths sum of which is target.
+	 * 
+	 * If target = 11, There exists a path only containing the node 11.
+	 * 
+	 * How is the binary tree represented?
+	 * 
+	 * We use the level order traversal sequence with a special symbol "#" denoting
+	 * the null node.
+	 * 
+	 * For Example:
+	 * 
+	 * The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
+	 * 
+	 * 1
+	 * 
+	 * / \
+	 * 
+	 * 2 3
+	 * 
+	 * /
+	 * 
+	 * 4
+	 */
+	public boolean exist2(TreeNode root, int target) {
+		if (root == null) {
+			return false;
+		}
+		Set<Integer> prefixSums = new HashSet<>();
+		prefixSums.add(0);
+		return helperII(root, prefixSums, 0, target);
+	}
+
+	private boolean helperII(TreeNode root, Set<Integer> prefixSums, int prevSum, int sum) {
+		prevSum += root.value;
+		if (prefixSums.contains(prevSum - sum)) {
+			return true;
+		}
+		boolean needRemove = prefixSums.add(prevSum);
+		if (root.left != null && helperII(root.left, prefixSums, prevSum, sum)) {
+			return true;
+		}
+		if (root.right != null && helperII(root.right, prefixSums, prevSum, sum)) {
+			return true;
+		}
+		if (needRemove) {
+			prefixSums.remove(prevSum);
+		}
+		return false;
+	}
+
+	/*
+	 * 388. Longest Ascending Path Binary Tree
+	 * 
+	 * Determine the length of the longest ascending path in the binary tree.
+	 * 
+	 * A valid path is a part of the path from root to any of the leaf nodes.
+	 * 
+	 * Examples:
+	 * 
+	 * 5
+	 * 
+	 * / \
+	 * 
+	 * 3 2
+	 * 
+	 * / \ \
+	 * 
+	 * 1 0 11
+	 * 
+	 * the longest ascending path is 2 -> 11, length is 2.
+	 * 
+	 * How is the binary tree represented?
+	 * 
+	 * We use the level order traversal sequence with a special symbol "#" denoting
+	 * the null node.
+	 * 
+	 * For Example:
+	 * 
+	 * The sequence [1, 2, 3, #, #, 4] represents the following binary tree:
+	 * 
+	 * 1
+	 * 
+	 * / \
+	 * 
+	 * 2 3
+	 * 
+	 * /
+	 * 
+	 * 4
+	 */
+	public int longest(TreeNode root) {
+		if (root == null) {
+			return 0;
+		}
+		int[] max = new int[] { 0 };
+		maxPath(root, root.value, 0, max);
+		return max[0];
+	}
+
+	private void maxPath(TreeNode root, int preValue, int curLen, int[] max) {
+		if (root == null) {
+			return;
+		}
+		if (root.value > preValue) {
+			curLen++;
+		} else {
+			curLen = 1;
+		}
+		max[0] = Math.max(max[0], curLen);
+		maxPath(root.left, root.value, curLen, max);
+		maxPath(root.right, root.value, curLen, max);
+	}
 }
