@@ -6,31 +6,38 @@ public class ThreeSumSmaller {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				if (j == 2) {
-					break;
-				}
-				System.out.println(j);
-			}
-		}
+		
+		
 
 	}
 
-	public static int threeSumSmaller(int[] num, int target) {
+	/*
+	 * 496. 3Sum Smaller
+	 * 
+	 * Given an array of n integers nums and a target, find the number of index
+	 * triplets i, j, k with 0 <= i < j < k < n that satisfy the condition nums[i] +
+	 * nums[j] + nums[k] < target.
+	 * 
+	 * For example, given nums = [-2, 0, 1, 3], and target = 2.
+	 * 
+	 * Return 2. Because there are two triplets which sums are less than 2:
+	 * 
+	 * [-2, 0, 1] [-2, 0, 3]
+	 */
+	public int threeSumSmaller(int[] num, int target) {
 	    if (num == null || num.length <= 2) {
 	      return 0;
 	    }
 	    int res = 0;
 	    Arrays.sort(num);
 	    for (int i = 0; i < num.length - 2; i++) {
-	      for (int j = 1; j < num.length - 1; j++) {
-	        for (int k = 2; k < num.length; k++) {
-	          if (num[i] + num[j] + num[k] < target) {
-	            res++;
-	          } else {
-	            break;
-	          }
+	      int left = i + 1, right = num.length - 1;
+	      while (left < right) {
+	        if (num[i] + num[left] + num[right] < target) {
+	          res += right - left;
+	          left++;
+	        } else {
+	          right--;
 	        }
 	      }
 	    }
