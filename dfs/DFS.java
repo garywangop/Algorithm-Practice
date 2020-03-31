@@ -15,6 +15,8 @@ public class DFS {
 		DFS sol = new DFS();
 		char[] arr = new char[] { '1', 'b', 'd' };
 		System.out.println(new String(arr));
+		int[] arr1 = new int[] {1,2,3,5};
+		System.out.println(minDifference(arr1));
 	}
 
 	/*
@@ -719,4 +721,38 @@ public class DFS {
 		}
 		return true;
 	}
+	
+	/*
+	 * 263. Two Subsets With Min Difference
+	 * 
+	 * Given a set of n integers, divide the set in two subsets of n/2 sizes each
+	 * such that the difference of the sum of two subsets is as minimum as possible.
+	 * 
+	 * Return the minimum difference(absolute value).
+	 * 
+	 * Assumptions:
+	 * 
+	 * The given integer array is not null and it has length of >= 2. Examples:
+	 * 
+	 * {1, 3, 2} can be divided into {1, 2} and {3}, the minimum difference is 0
+	 */
+	
+	public static int minDifference(int[] array) {
+		int[] res = new int[] { Integer.MAX_VALUE};
+	    helper263(array, 0, 0, 0, res);
+	    return res[0];
+	  }
+
+	  private static void helper263(int[] arr, int index, int leftSum, int rightSum, int[] res) {
+	    if (index == arr.length) {
+	      res[0] = Math.min(res[0], Math.abs(leftSum - rightSum));
+	      return;
+	    }
+	    // Add arr[index] to left
+	    helper263(arr, index + 1, leftSum + arr[index], rightSum, res);
+//	    leftSum -= arr[index];
+	    // Add arr[index] to right
+	    helper263(arr, index + 1, leftSum, rightSum + arr[index], res);
+//	    rightSum -= arr[index];
+	  }
 }
