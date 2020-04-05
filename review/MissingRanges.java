@@ -7,15 +7,18 @@ public class MissingRanges {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		System.out.println(100009%10);
 
 	}
 
 	/*
 	 * 491. Missing Ranges
 	 * 
-	 * Given a sorted integer array where the range of elements are in the inclusive range [lower, upper], return its missing ranges.
-
-For example, given [0, 1, 3, 50, 75], lower = 0 and upper = 99, return ["2", "4->49", "51->74", "76->99"].
+	 * Given a sorted integer array where the range of elements are in the inclusive
+	 * range [lower, upper], return its missing ranges.
+	 * 
+	 * For example, given [0, 1, 3, 50, 75], lower = 0 and upper = 99, return ["2",
+	 * "4->49", "51->74", "76->99"].
 	 */
 	
 	public List<String> findMissingRanges(int[] nums, int lower, int upper) {
