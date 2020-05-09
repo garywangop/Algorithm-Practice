@@ -8,8 +8,9 @@ public class AllDecode {
 	public static void main (String args[]) {
 		AllDecode s = new AllDecode();
 		List<String> res = s.decode("1121");
-		for (String str : res) {
-			System.out.println(str);
+		
+		for (int i = 0; i < res.size(); i++) {
+			System.out.println(res.get(i));
 		}
 	}
 
@@ -19,34 +20,38 @@ public class AllDecode {
 			return res;
 		}
 		StringBuilder sb = new StringBuilder();
-		dfs(0, input, sb, res);
+		dfs(input, 0, sb, res);
 		return res;
 	}
 	
-	private void dfs(int index, String input, StringBuilder sb, List<String> res) {
+	private void dfs(String input, int index, StringBuilder sb, List<String> res) {
 		if (index == input.length()) {
 			res.add(sb.toString());
-			return;
 		}
+		
 		for (int i = 1; i <= 2; i++) {
-			Character ch = decodeOneCharacter(input, index, 1);
-			if (ch != null) {
-				sb.append(ch);
-				dfs(index + i, input, sb, res);
+			Character str = decode(input, index, i);
+			if (str != null) {
+				sb.append(str);
+				dfs(input, index + i, sb, res);
 				sb.deleteCharAt(sb.length() - 1);
 			}
 		}
 	}
 	
-	private Character decodeOneCharacter(String input, int index, int offset) {
-		if (index >= input.length() || index + offset > input.length()) {
+	private Character decode(String input, int index, int i) {
+		if (index >= input.length() || index + i > input.length()) {
 			return null;
 		}
-		String subStr = input.substring(index, offset);
-		int code = Integer.parseInt(subStr);
-		if (code >= 1 && code <= 26) {
-			return (char)(code + 'A' - 1);
+		String cur = input.substring(index, index + i);
+		int offset = 0;
+		for (int j = 0; j < cur.length(); j++) {
+			offset = 10 * offset + (cur.charAt(j) - '0');
+		}
+		if (offset >= 1 && offset <= 26) {
+			return (char)('A' + offset - 1);
 		}
 		return null;
 	}
+
 }

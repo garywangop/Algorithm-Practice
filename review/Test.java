@@ -16,44 +16,37 @@ public class Test {
 	public static void main(String[] args) {
 		Test sol = new Test();
 		/*
-		 * [[["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]]
+		 * {{{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}}}
 		 */
-		//String[][] test = new String[][] {{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}};
+		//String{}{} test = new String{}{} {{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}};
+		int[][] arr = new int[][] {{-7,-3},{-7,-1},{-2,-2},{0,-8},{2,-2},{5,-6},{5,-5},{1,7}};
 		
+		System.out.println(sol.checkStraightLine(arr));
 		
-		System.out.println(sol.haveSomeFun(new int[] {1,2,3}));
-		String s1 = "abc";
-		String s2 = "abd";
-		System.out.println(s1.compareTo(s2));
 		
 	}
 	
-	private class MaxComparator implements Comparator<Integer> {
-		@Override
-		public int compare(Integer i1, Integer i2) {
-			if (i1.equals(i2)) {
-				return 0;
-			}
-			return i1 > i2 ? -1 : 1;
+	public boolean checkStraightLine(int[][] coordinates) {
+		int slope = 0;
+		if (coordinates[0][0] - coordinates[1][0] == 0) {
+			slope = Integer.MAX_VALUE;
+		} else {
+			slope = (coordinates[0][1] - coordinates[1][1]) / (coordinates[0][0] - coordinates[1][0]);
 		}
-	}
-	
-	private class MinComparator implements Comparator<Integer> {
-		@Override
-		public int compare(Integer e1, Integer e2) {
-			if (e1.equals(e2)) {
-				return 0;
-			}
-			return e1 < e1 ? -1 : 1;
-		}
-	}
-	
-	public int haveSomeFun(int[] arr) {
-		PriorityQueue<Integer> maxHeap = new PriorityQueue<>(new MinComparator());
-		for (int i : arr) {
-			maxHeap.offer(i);
-		}
-		return maxHeap.poll();
-	}
+        
+        for (int i = 2; i < coordinates.length; i++) {
+        	if (slope == Integer.MAX_VALUE) {
+        		if (coordinates[i][0] != coordinates[i - 1][0]) {
+        			return false;
+        		}
+        	} else {
+        		if (coordinates[i][1] - coordinates[i - 1][1] != slope * (coordinates[i][0] - coordinates[i - 1][0])) {
+                    return false;
+                }
+        	}
+            
+        }
+        return true;
+    }
 
 }
