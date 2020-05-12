@@ -19,34 +19,40 @@ public class Test {
 		 * {{{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}}}
 		 */
 		//String{}{} test = new String{}{} {{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}};
-		int[][] arr = new int[][] {{-7,-3},{-7,-1},{-2,-2},{0,-8},{2,-2},{5,-6},{5,-5},{1,7}};
+		int[] arr = new int[]{-4,-4,8,16};
 		
-		System.out.println(sol.checkStraightLine(arr));
+		System.out.println(sol.threeSum(arr));
 		
 		
 	}
 	
-	public boolean checkStraightLine(int[][] coordinates) {
-		int slope = 0;
-		if (coordinates[0][0] - coordinates[1][0] == 0) {
-			slope = Integer.MAX_VALUE;
-		} else {
-			slope = (coordinates[0][1] - coordinates[1][1]) / (coordinates[0][0] - coordinates[1][0]);
-		}
-        
-        for (int i = 2; i < coordinates.length; i++) {
-        	if (slope == Integer.MAX_VALUE) {
-        		if (coordinates[i][0] != coordinates[i - 1][0]) {
-        			return false;
-        		}
-        	} else {
-        		if (coordinates[i][1] - coordinates[i - 1][1] != slope * (coordinates[i][0] - coordinates[i - 1][0])) {
-                    return false;
-                }
-        	}
-            
+	public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (nums == null || nums.length < 3) {
+            return res;
         }
-        return true;
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i >  0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int left = i + 1;
+            int right = nums.length - 1;
+            while (left < right) {
+                if (nums[i] + nums[left] + nums[right] == 0) {
+                    res.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    left++;
+                    while (left < right && nums[left] == nums[left - 1]) {
+                        left++;
+                    }
+                } else if (nums[i] + nums[left] + nums[right] < 0) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        return res;
     }
 
 }

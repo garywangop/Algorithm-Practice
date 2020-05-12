@@ -13,10 +13,7 @@ import java.util.Set;
 public class DFS {
 	public static void main(String args[]) {
 		DFS sol = new DFS();
-		char[] arr = new char[] { '1', 'b', 'd' };
-		System.out.println(new String(arr));
-		int[] arr1 = new int[] {1,2,3,5};
-		System.out.println(minDifference(arr1));
+		System.out.println(sol.subSetsIIOfSizeK("usadedxrb", 3));
 	}
 
 	/*
@@ -294,6 +291,48 @@ public class DFS {
 	 * “(){}()”, “{()()}”, “{()}()”, “{}()()”].
 	 */
 
+	private static final char[] p = new char[] { '(', ')', '<', '>', '{', '}' };
+
+	public List<String> validParenthesesIII(int l, int m, int n) {
+		List<String> res = new ArrayList<>();
+		Deque<Integer> stack = new ArrayDeque<>();
+		int[] remain = new int[] { l, l, m, m, n, n };
+		helper642(0, 2 * (l + m + n), remain, stack, new StringBuilder(), res);
+		return res;
+	}
+
+	private void helper642(int index, int total, int[] remain, Deque<Integer> stack, StringBuilder sb,
+			List<String> res) {
+		if (index == total) {
+			res.add(sb.toString());
+			return;
+		}
+
+		for (int i = 0; i < remain.length; i++) {
+			if (i % 2 == 0) {
+				if (remain[i] > 0 && (stack.isEmpty() || stack.peekFirst() > i)) {
+					stack.offerFirst(i);
+					remain[i]--;
+					sb.append(p[i]);
+					helper642(index + 1, total, remain, stack, sb, res);
+					stack.pollFirst();
+					remain[i]++;
+					sb.deleteCharAt(sb.length() - 1);
+				}
+			} else {
+				if (!stack.isEmpty() && stack.peekFirst() == i - 1) {
+					stack.pollFirst();
+					remain[i]--;
+					sb.append(p[i]);
+					helper642(index + 1, total, remain, stack, sb, res);
+					stack.offerFirst(i - 1);
+					remain[i]++;
+					sb.deleteCharAt(sb.length() - 1);
+				}
+			}
+		}
+	}
+
 	/*
 	 * 641. All Subsets II of Size K Given a set of characters represented by a
 	 * String, return a list containing all subsets of the characters whose size is
@@ -344,10 +383,10 @@ public class DFS {
 		// Add arrSet[index] at this level
 		dfs641(arrSet, k, sb.append(arrSet[index]), index + 1, res);
 		sb.deleteCharAt(sb.length() - 1);
+		// Don't add arrSet[index] at this level
 		while (index < arrSet.length - 1 && arrSet[index] == arrSet[index + 1]) {
 			index++;
 		}
-		// Don't add arrSet[index] at this level
 		dfs641(arrSet, k, sb, index + 1, res);
 	}
 
@@ -721,7 +760,7 @@ public class DFS {
 		}
 		return true;
 	}
-	
+
 	/*
 	 * 263. Two Subsets With Min Difference
 	 * 
@@ -736,23 +775,23 @@ public class DFS {
 	 * 
 	 * {1, 3, 2} can be divided into {1, 2} and {3}, the minimum difference is 0
 	 */
-	
-	public static int minDifference(int[] array) {
-		int[] res = new int[] { Integer.MAX_VALUE};
-	    helper263(array, 0, 0, 0, res);
-	    return res[0];
-	  }
 
-	  private static void helper263(int[] arr, int index, int leftSum, int rightSum, int[] res) {
-	    if (index == arr.length) {
-	      res[0] = Math.min(res[0], Math.abs(leftSum - rightSum));
-	      return;
-	    }
-	    // Add arr[index] to left
-	    helper263(arr, index + 1, leftSum + arr[index], rightSum, res);
+	public static int minDifference(int[] array) {
+		int[] res = new int[] { Integer.MAX_VALUE };
+		helper263(array, 0, 0, 0, res);
+		return res[0];
+	}
+
+	private static void helper263(int[] arr, int index, int leftSum, int rightSum, int[] res) {
+		if (index == arr.length) {
+			res[0] = Math.min(res[0], Math.abs(leftSum - rightSum));
+			return;
+		}
+		// Add arr[index] to left
+		helper263(arr, index + 1, leftSum + arr[index], rightSum, res);
 //	    leftSum -= arr[index];
-	    // Add arr[index] to right
-	    helper263(arr, index + 1, leftSum, rightSum + arr[index], res);
+		// Add arr[index] to right
+		helper263(arr, index + 1, leftSum, rightSum + arr[index], res);
 //	    rightSum -= arr[index];
-	  }
+	}
 }

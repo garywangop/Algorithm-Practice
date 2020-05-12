@@ -1,5 +1,7 @@
 package midterm;
 
+import java.util.Arrays;
+
 public class TwoNodesDistanceInBST {
 
 	public static void main(String[] args) {
@@ -29,7 +31,7 @@ public class TwoNodesDistanceInBST {
 		System.out.println(sol.findDistance(node1, node4, node8));
 		System.out.println(sol.findDistance(node1, node2, node9));
 		System.out.println(sol.findDistance(node1, node6, node10));
-
+		
 	}
 
 	public int findDistance(TreeNode root, TreeNode a, TreeNode b) {
