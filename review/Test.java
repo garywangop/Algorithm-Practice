@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 import solution.ListNode;
+import solution.TreeNode;
 
 public class Test {
 
@@ -19,40 +20,43 @@ public class Test {
 		 * {{{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}}}
 		 */
 		//String{}{} test = new String{}{} {{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}};
-		int[] arr = new int[]{-4,-4,8,16};
 		
-		System.out.println(sol.threeSum(arr));
+		TreeNode node1 = new TreeNode(1);
+		TreeNode node3 = new TreeNode(1);
+		TreeNode node5 = new TreeNode(1);
+		TreeNode node7 = new TreeNode(1);
+		TreeNode node2 = new TreeNode(0);
+		TreeNode node4 = new TreeNode(0);
+		TreeNode node6 = new TreeNode(0);
+		node1.left = node2;
+		node1.right = node3;
+		node2.left = node4;
+		node2.right = node5;
+		node3.left = node6;
+		node3.right = node7;
+		System.out.println(sol.sumRootToLeaf(node1));
 		
 		
 	}
 	
-	public List<List<Integer>> threeSum(int[] nums) {
-        List<List<Integer>> res = new ArrayList<>();
-        if (nums == null || nums.length < 3) {
-            return res;
-        }
-        Arrays.sort(nums);
-        for (int i = 0; i < nums.length - 2; i++) {
-            if (i >  0 && nums[i] == nums[i - 1]) {
-                continue;
-            }
-            int left = i + 1;
-            int right = nums.length - 1;
-            while (left < right) {
-                if (nums[i] + nums[left] + nums[right] == 0) {
-                    res.add(Arrays.asList(nums[i], nums[left], nums[right]));
-                    left++;
-                    while (left < right && nums[left] == nums[left - 1]) {
-                        left++;
-                    }
-                } else if (nums[i] + nums[left] + nums[right] < 0) {
-                    left++;
-                } else {
-                    right--;
-                }
-            }
-        }
+	int res = 0;
+    public int sumRootToLeaf(TreeNode root) {
+        int sum = 0;
+        helper(root, sum);
         return res;
+    }
+    
+    private void helper(TreeNode root, int sum) {
+        if (root == null) {
+            return;
+        }
+        sum = (sum << 1) + root.value;
+        if (root.left == null && root.right == null) {
+            res += sum;
+            return;
+        }
+        helper(root.left, sum);
+        helper(root.right, sum);
     }
 
 }
