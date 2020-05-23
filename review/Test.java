@@ -16,47 +16,37 @@ public class Test {
 
 	public static void main(String[] args) {
 		Test sol = new Test();
-		/*
-		 * {{{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}}}
-		 */
-		//String{}{} test = new String{}{} {{"JFK","SFO"},{"JFK","ATL"},{"SFO","ATL"},{"ATL","JFK"},{"ATL","SFO"}};
 		
-		TreeNode node1 = new TreeNode(1);
-		TreeNode node3 = new TreeNode(1);
-		TreeNode node5 = new TreeNode(1);
-		TreeNode node7 = new TreeNode(1);
-		TreeNode node2 = new TreeNode(0);
-		TreeNode node4 = new TreeNode(0);
-		TreeNode node6 = new TreeNode(0);
-		node1.left = node2;
-		node1.right = node3;
-		node2.left = node4;
-		node2.right = node5;
-		node3.left = node6;
-		node3.right = node7;
-		System.out.println(sol.sumRootToLeaf(node1));
-		
-		
+		System.out.println(sol.combinationSum2(new int[] {2, 2,2}, 2));
 	}
-	
-	int res = 0;
-    public int sumRootToLeaf(TreeNode root) {
-        int sum = 0;
-        helper(root, sum);
+	public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> cur = new ArrayList<>();
+        Arrays.sort(candidates);
+        helper(candidates, 0, target, cur, res);
         return res;
     }
-    
-    private void helper(TreeNode root, int sum) {
-        if (root == null) {
+	
+	private void helper(int[] arr, int index, int target, List<Integer> cur, List<List<Integer>> res) {
+		if (target == 0) {
+            res.add(new ArrayList<>(cur));
             return;
         }
-        sum = (sum << 1) + root.value;
-        if (root.left == null && root.right == null) {
-            res += sum;
+        
+        if (target < 0 || index == arr.length) {
             return;
         }
-        helper(root.left, sum);
-        helper(root.right, sum);
+        
+        // Add arr[index]
+        cur.add(arr[index]);
+        helper(arr, index + 1, target - arr[index], cur, res);
+        cur.remove(cur.size() - 1);
+        
+        // Don't add arr[index]
+        while (index < arr.length - 1 && arr[index] == arr[index + 1]) {
+            index++;
+        }
+        helper(arr, index + 1, target, cur, res);
     }
 
 }
