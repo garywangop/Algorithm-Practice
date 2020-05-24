@@ -8,8 +8,15 @@ import java.util.HashSet;
 public class Trie {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		char[][] arr = new char[][]{
+			  {'o','a','a','n'},
+			  {'e','t','a','e'},
+			  {'i','h','k','r'},
+			  {'i','f','l','v'}
+			};
+		String[] words = new String[] {"oaa","oath"};
+		Trie sol = new Trie();
+		System.out.println(sol.findWords(arr, words));
 	}
 
 	/*
