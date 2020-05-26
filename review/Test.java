@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 import solution.ListNode;
 import solution.TreeNode;
@@ -16,8 +18,11 @@ public class Test {
 
 	public static void main(String[] args) {
 		Test sol = new Test();
-		
-		System.out.println(sol.combinationSum2(new int[] {2, 2,2}, 2));
+		Deque<Integer> deque = new ArrayDeque<>();
+		deque.offerFirst(1);
+		deque.offerFirst(2);
+		deque.offerLast(3);
+		System.out.println(deque.peek());
 	}
 	public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> res = new ArrayList<>();

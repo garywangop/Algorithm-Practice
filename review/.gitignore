@@ -32,3 +32,5 @@
 /temp.class
 /BuildTrie.class
 /BuildTrie$TrieNode.class
+/PathSum.class
+/PathSum$TreeNode.class
