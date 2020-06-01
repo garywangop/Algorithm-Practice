@@ -13,7 +13,7 @@ import java.util.Set;
 public class DFS {
 	public static void main(String args[]) {
 		DFS sol = new DFS();
-		System.out.println(sol.subSetsIIOfSizeK("usadedxrb", 3));
+		System.out.println(sol.Restore("0000"));
 	}
 
 	/*

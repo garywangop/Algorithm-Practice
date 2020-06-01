@@ -23,6 +23,13 @@ public class Test {
 		deque.offerFirst(2);
 		deque.offerLast(3);
 		System.out.println(deque.peek());
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append('a');
+		sb.append('b');
+		sb.append('c');
+		sb.deleteCharAt(2);
+		System.out.println(sb.toString());
 	}
 	public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> res = new ArrayList<>();
