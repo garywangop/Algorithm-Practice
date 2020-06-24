@@ -30,6 +30,12 @@ public class Test {
 		sb.append('c');
 		sb.deleteCharAt(2);
 		System.out.println(sb.toString());
+		
+		String s = "abc";
+		System.out.println(s.substring(0,3));
+		String ss = "abcd";
+		System.out.println(ss.substring(4).isEmpty());
+		
 	}
 	public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> res = new ArrayList<>();
