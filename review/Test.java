@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.Deque;
 import java.util.ArrayDeque;
 
@@ -18,53 +20,33 @@ public class Test {
 
 	public static void main(String[] args) {
 		Test sol = new Test();
-		Deque<Integer> deque = new ArrayDeque<>();
-		deque.offerFirst(1);
-		deque.offerFirst(2);
-		deque.offerLast(3);
-		System.out.println(deque.peek());
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append('a');
-		sb.append('b');
-		sb.append('c');
-		sb.deleteCharAt(2);
-		System.out.println(sb.toString());
-		
-		String s = "abc";
-		System.out.println(s.substring(0,3));
-		String ss = "abcd";
-		System.out.println(ss.substring(4).isEmpty());
-		
+		int[] arr = new int[] {1,2,0,-1,-2,-3};
+		System.out.println(sol.findMid(arr));
 	}
-	public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        List<List<Integer>> res = new ArrayList<>();
-        List<Integer> cur = new ArrayList<>();
-        Arrays.sort(candidates);
-        helper(candidates, 0, target, cur, res);
-        return res;
-    }
+	/* 0 1 2 3 4 5 6 7 8 9 10 11 12
+	 * 1,2,3,4,5,6,7,8,9,7, 3, 2, 1
+	 *               l r
+	 * if (arr[mid - 1] < arr[mid + 1]) left = mid + 1
+	 * if (arr[mid - 1] > arr[mid + 1]) right = mid - 1
+	 * 
+	 */
 	
-	private void helper(int[] arr, int index, int target, List<Integer> cur, List<List<Integer>> res) {
-		if (target == 0) {
-            res.add(new ArrayList<>(cur));
-            return;
-        }
-        
-        if (target < 0 || index == arr.length) {
-            return;
-        }
-        
-        // Add arr[index]
-        cur.add(arr[index]);
-        helper(arr, index + 1, target - arr[index], cur, res);
-        cur.remove(cur.size() - 1);
-        
-        // Don't add arr[index]
-        while (index < arr.length - 1 && arr[index] == arr[index + 1]) {
-            index++;
-        }
-        helper(arr, index + 1, target, cur, res);
-    }
+	public int findMid(int[] arr) {
+		int left = 0;
+		int right = arr.length - 1;
+		while (left <= right) {
+			int mid = left + (right - left) / 2;
+			if (mid == left) {
+				return arr[left] > arr[right] ? left : right;
+			} else if (arr[mid - 1] < arr[mid] && arr[mid + 1] < arr[mid]) {
+				return mid;
+			} else if (arr[mid - 1] < arr[mid + 1]) {
+				left = mid + 1;
+			} else if (arr[mid - 1] > arr[mid + 1]) {
+				right = mid - 1;
+			}
+		}
+		return -1;
+	}
 
 }
