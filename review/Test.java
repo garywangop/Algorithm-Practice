@@ -22,6 +22,7 @@ public class Test {
 		Test sol = new Test();
 		int[] arr = new int[] {1,2,0,-1,-2,-3};
 		System.out.println(sol.findMid(arr));
+		System.out.println(11 % 13);
 	}
 	/* 0 1 2 3 4 5 6 7 8 9 10 11 12
 	 * 1,2,3,4,5,6,7,8,9,7, 3, 2, 1
