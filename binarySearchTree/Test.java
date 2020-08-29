@@ -5,9 +5,13 @@ import solution.TreeNode;
 public class Test {
 
 	public static void main(String[] args) {
+		
+		Integer[] arr = new Integer[] {1,2,null,4,5,6,7};
+		Tree test = new TreeImpl();
+		test.print(test.create(arr));
 //		IsBST sol1 = new IsBST();
 //		SmallestLarger sol = new SmallestLarger();
-		CloestToTarget sol = new CloestToTarget();
+		//CloestToTarget sol = new CloestToTarget();
 		
 		/*
 		 *      23
@@ -51,7 +55,7 @@ public class Test {
 		node12.right = node14;
 //		System.out.println(sol1.isBST(node1));
 //		System.out.println(sol.smallestLarger(node1, 9));
-		System.out.println(sol.cloest(node1, 10));
+		//System.out.println(sol.cloest(node1, 10));
 		
 		/*
 		 *  10
