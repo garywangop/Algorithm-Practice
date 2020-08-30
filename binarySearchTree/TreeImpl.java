@@ -20,11 +20,11 @@ public class TreeImpl implements Tree{
 		
 		while (index < list.length) {
 			TreeNode cur = q.poll();
-			if (++index < list.length) {
+			if (++index < list.length && list[index] != null) {
 				cur.left = new TreeNode(list[index]);
 				q.offer(cur.left);
 			}
-			if (++index < list.length) {
+			if (++index < list.length && list[index] != null) {
 				cur.right = new TreeNode(list[index]);
 				q.offer(cur.right);
 			}
@@ -35,6 +35,10 @@ public class TreeImpl implements Tree{
 
 	@Override
 	public void print(TreeNode root) {
+		if (root == null) {
+			System.out.print("root is null");
+			return;
+		}
 		Queue<TreeNode> q = new ArrayDeque<>();
 		q.offer(root);
 		while (!q.isEmpty()) {
