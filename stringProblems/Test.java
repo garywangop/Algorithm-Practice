@@ -9,6 +9,10 @@ public class Test {
 		int[] arr = new int[] {1,0,0,1,1,1,0,1,0,1,1,0,1,0,1,1,1,0,1,0,1,1,1,0,0,0,1,1,1,1,1,1,0,0,1,1,1,0,0,1,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,1,0,1,0,0,0,1,1,0,1,0,1,0,0,1,1,0,0,1,0,1,0,0,0,1,1,0,0,1,1,1,1,1,1,1,0,1,1,1,0,1,0,0,0,1,0,1,1,1,1,0,0,1,0,1,0,1,1,0,1,0,1,1,0,0,1,1,0,1,1,0,1,1,0,0,0,1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,1,0,1,0,1,0,1,1,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,1,0,1,1,0,0,0,1,1,1,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,1,0,1,0,1,0,1,1,0,1,0,0,0,1,0,1,1,1,0,1,1,1,0,1,0,1,1,0,1,1,1,1,0,0,0,1,1,1,1,0,1,1,1,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,1,0,0,1,1,0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,0,0,0,0};
 		System.out.println(sol.longestConsecutiveOnes(arr, 76));
 		
+		String s1 = new String("laioffercom");
+		String s2 = new String("l10");
+		System.out.println(sol.match(s1, s2));
+		
 	}
 	
 	/*
@@ -49,4 +53,39 @@ countZero	2 2 1 0 0 0 0
 	    }
 	    return res;
 	}
+	
+	public boolean match(String input, String pattern) {
+	    return helper(input, pattern, 0, 0);
+	  }
+
+	private boolean helper(String input, String pattern, int i, int j) {
+	    if (i == input.length() && j == pattern.length()) {
+      return true;
+    }
+
+    if (i >= input.length() || j >= pattern.length()) {
+      return false;
+    }
+
+    char source = input.charAt(i);
+    char target = pattern.charAt(j);
+    if (target >= 'a' && target <= 'z') {
+      if (source != target) {
+        return false;
+      } else {
+        return helper(input, pattern, i + 1, j + 1);
+      }
+    }
+
+    int count = 0;
+    if (target >= '0' && target <= '9') {
+      while (j < pattern.length() && pattern.charAt(j) >= '0' && pattern.charAt(j) <= '9') {
+        count = count * 10 + pattern.charAt(j) - '0';
+        j++;
+      }
+      return helper(input, pattern, i + count, j);
+    }
+
+    return false;
+}
 }
