@@ -1,43 +1,42 @@
 package dfs;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Test {
 
 	public static void main(String[] args) {
-		String[] res = combinations(231);
-		for (String i : res) {
-			System.out.println(i);
+		Test sol = new Test();
+		String[] res = sol.combinations(5002);
+		for (String s : res) {
+			System.out.println(s);	
 		}
+		
+	}
 
+	public List<String> Restore(String ip) {
+		List<String> res = new ArrayList<>();
+		if (ip == null) {
+			return res;
+		}
+		helper(ip, 0, 0, new StringBuilder(), res);
+		return res;
 	}
 	
-	 private static final String[] phone = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-  
-	 public static String[] combinations(int number) {
-		 List<String> res = new ArrayList<>();
-		 helper(Integer.toString(number).toCharArray(), 0, new StringBuilder(), res);
-		 return res.toArray(new String[0]);
-	  }
-	 
-	 private static void helper(char[] arr, int index, StringBuilder sb, List<String> res) {
-		 if (index == arr.length) {
-			 res.add(sb.toString());
-			 return;
-		 }
-		 
-		 String cur = phone[arr[index] - '0'];
-		 if (cur.length() == 0) {
-			 helper(arr, index + 1, sb, res);
-		 } else {
-			 for (int i = 0; i < cur.length(); i++) {
-				 char ch = cur.charAt(i);
-				 sb.append(ch);
-				 helper(arr, index + 1, sb, res);
-				 sb.deleteCharAt(sb.length() - 1);
-			 }
-		 }
-	 }
-
+	private void helper(String ip, int index, int count, StringBuilder sb, List<String> res) {
+		if (index == ip.length() && count == 4) {
+			res.add(sb.toString());
+			return;
+		} else if (index == ip.length() || count == 4) {
+			return;
+		}
+		
+		int size = sb.length();
+		for (int i = index; i < index + 3; i++) {
+			if (i < ip.length()) {
+				sb.append(ip.charAt(i)).append('.');
+				helper(ip, index + 1, count + 1, sb, res);
+				sb.setLength(size);
+			}
+		}
+	}
 }

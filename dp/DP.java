@@ -7,8 +7,11 @@ import java.util.Set;
 public class DP {
 	public static void main(String args[]) {
 		DP dp = new DP();
-		Random rand = new Random();
-		System.out.println(rand.nextInt(5));
+		
+		// canBreak
+		// public boolean canBreak(String input, String[] dict)
+		String[] dict = new String[] {"leet", "code"};
+		System.out.println(dp.canBreak("leetcode", dict));
 	}
 	
 	// Fibonacci Number
