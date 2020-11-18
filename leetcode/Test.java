@@ -4,23 +4,20 @@ public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-		System.out.println(Test.checkPossibility(new int[]{3,4,2,3}));
+		String s = "[[47,220],[65,1],[98,113],[126,196],[186,218],[320,205],[686,317],[707,325],[754,104],[781,105]]";
+		String res = Test.sss(s);
+		System.out.println(res);
 	}
 	
-	public static boolean checkPossibility(int[] nums) {
-		 boolean flag = false;
-		 int num = nums[0];
-		 for (int i = 1; i < nums.length; i++) {
-			 if (nums[i] < nums[i - 1]) {
-				 if (flag) {
-					 return false;
-				 } else {
-					 flag = true;
-					 
-				 }
-			 }
-		 }
-		 return true;
+	public static String sss(String s) {
+		char[] arr = s.toCharArray();
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == '[') {
+				arr[i] = '{';
+			} else if (arr[i] == ']') {
+				arr[i] = '}';
+			}
+		}
+		return new String(arr);
 	}
 }
