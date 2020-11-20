@@ -1,5 +1,7 @@
 package leetcode;
 
+import java.util.*;
+
 public class Test {
 
 	public static void main(String[] args) {
@@ -7,6 +9,13 @@ public class Test {
 		String s = "[[47,220],[65,1],[98,113],[126,196],[186,218],[320,205],[686,317],[707,325],[754,104],[781,105]]";
 		String res = Test.sss(s);
 		System.out.println(res);
+		
+		Set<String> set = new HashSet<>();
+		set.add("abc");
+		StringBuilder sb = new StringBuilder();
+		sb.append("abc");
+		System.out.println(sb);
+		System.out.println(set.contains(sb.toString()));
 	}
 	
 	public static String sss(String s) {
