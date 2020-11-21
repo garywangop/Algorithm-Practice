@@ -17,6 +17,7 @@ public class Trie {
 		String[] words = new String[] {"oaa","oath"};
 		Trie sol = new Trie();
 		System.out.println(sol.findWords(arr, words));
+		System.out.println(sol.findWords(new char[][] {{'a', 'a'}}, new String[] {"a"}));
 	}
 
 	/*
