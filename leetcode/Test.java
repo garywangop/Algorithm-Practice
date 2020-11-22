@@ -16,6 +16,12 @@ public class Test {
 		sb.append("abc");
 		System.out.println(sb);
 		System.out.println(set.contains(sb.toString()));
+		int[] arr = new int[] {1,2,3};
+		int[] prev = new int[] {4,5,6};
+		prev = arr;
+		for (int i : prev) {
+			System.out.println(i);
+		}
 	}
 	
 	public static String sss(String s) {

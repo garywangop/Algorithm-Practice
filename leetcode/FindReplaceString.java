@@ -21,15 +21,20 @@ public class FindReplaceString {
 			pair[i] = new Pair(indexes[i], sources[i], targets[i]);
 		}
 		
+		/*
 		Arrays.sort(pair, new Comparator<Pair>() {
 			@Override
 			public int compare(Pair e1, Pair e2) {
 				if (e1.index == e2.index) {
 					return 0;
 				}
-				return e1.index < e2.index ? -1 : 1;
+				return e1.index - e2.index < 0 ? -1 : 1;
+				return e2.index - e1.index < 0 ? -1 : 1;
 			}
 		});
+		*/
+		
+		Arrays.parallelSort(pair, (e1, e2) -> e1.index - e2.index);
 		
 		int idx = 0;
 		// 遍历S

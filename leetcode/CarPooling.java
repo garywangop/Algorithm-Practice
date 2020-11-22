@@ -17,8 +17,10 @@ public class CarPooling {
 	
 	// trip[i] = [num_passengers, start_location, end_location]
 	public boolean carPooling(int[][] trips, int capacity) {
-		Arrays.sort(trips, new MyComparator1());
-		PriorityQueue<int[]> minHeap = new PriorityQueue<>(new MyComparator2());
+		//Arrays.sort(trips, new MyComparator1());
+		Arrays.sort(trips, (e1, e2) -> e1[1] - e2[1]);
+		//PriorityQueue<int[]> minHeap = new PriorityQueue<>(new MyComparator2());
+		PriorityQueue<int[]> minHeap = new PriorityQueue<>((e1, e2) -> e1[2] - e2[2]);
 		minHeap.offer(trips[0]);
 		int cur = trips[0][0];
 		if (cur > capacity) {
