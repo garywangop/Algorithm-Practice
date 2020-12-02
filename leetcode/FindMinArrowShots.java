@@ -15,11 +15,43 @@ public class FindMinArrowShots {
 		
 		//System.out.println(sol.findMinArrowShots(points1));
 		//System.out.println(sol.findMinArrowShots(points2));
-		System.out.println(sol.findMinArrowShots(points3));
+		System.out.println(sol.findMinArrowShots1(points3));
+		System.out.println(sol.findMinArrowShots2(points3));
 	}
 	
 	// 452
-	public int findMinArrowShots(int[][] points) {
+	// Method 1: sort
+	public int findMinArrowShots1(int[][] points) {
+		if (points.length == 0) {
+			return 0;
+		}
+		//Arrays.sort(points, (e1, e2) -> (e1[0] - e2[0]));
+		Arrays.sort(points, new Comparator<int[]>() {
+			@Override
+			public int compare(int[] e1, int[] e2) {
+				if (e1[0] == e2[0]) {
+					return 0;
+				}
+				return e1[0] < e2[0] ? -1 : 1;
+			}
+		});
+		
+		int res = 1;
+		int end = points[0][1];
+		for (int i = 1; i < points.length; i++) {
+			int[] cur = points[i];
+			if (cur[0] > end) {
+				res++;
+				end = cur[1];
+			} else {
+				end = Math.min(end, cur[1]);
+			}
+		}
+		return res;
+	}
+	
+	// Method 2: sort + pq
+	public int findMinArrowShots2(int[][] points) {
         if (points.length == 0) {
             return 0;
         }
